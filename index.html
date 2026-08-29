@@ -1,649 +1,220 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego Social HD-2D Profesional - Modo Multijugador Real</title>
-    <style>
-        body { margin: 0; overflow: hidden; background-color: #0b0f19; user-select: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        canvas { display: block; }
-        
-        #interface {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #f0f3f8;
-            background: rgba(11, 15, 25, 0.85);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            pointer-events: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 10;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investigación Criminal - El Bar</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        #bloqueo-pantalla {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0,0,0,0.4);
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-            z-index: 5;
-        }
+    body {
+      background-color: #08090c;
+      color: #e1e4e8;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
 
-        #menu-tab {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 360px;
-            background: rgba(15, 22, 36, 0.95);
-            border: 2px solid #4cc9f0;
-            border-radius: 16px;
-            padding: 25px;
-            color: white;
-            display: none;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-        .tab-titulo { font-size: 1.3rem; font-weight: bold; text-align: center; color: #4cc9f0; margin-bottom: 5px; }
-        .tab-btn {
-            background: #243046;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        .tab-btn:hover { background: #4cc9f0; color: #0b0f19; }
-        .tab-btn.activo { background: #e63946; }
+    #game-container {
+      background-color: #12151e;
+      border: 2px solid #23283b;
+      border-radius: 10px;
+      max-width: 750px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+    }
 
-        #contenedor-chat {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 500px;
-            background: rgba(11, 15, 25, 0.9);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            display: none;
-            gap: 10px;
-            z-index: 200;
-        }
-        #input-chat {
-            flex: 1;
-            background: #1a2333;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 10px;
-            color: white;
-            border-radius: 6px;
-            outline: none;
-            font-size: 1rem;
-        }
-        
-        .burbuja-texto {
-            position: absolute;
-            background: white;
-            color: #181216;
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            pointer-events: none;
-            white-space: nowrap;
-            z-index: 50;
-            border: 2px solid #181216;
-        }
-        .burbuja-texto::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 8px 8px 0;
-            border-style: solid;
-            border-color: white transparent;
-            display: block;
-            width: 0;
-        }
-        
-        #prompt-interaccion {
-            position: absolute;
-            bottom: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: #4cc9f0;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            border: 1px solid #4cc9f0;
-            display: none;
-            pointer-events: none;
-            z-index: 30;
-        }
-    </style>
+    /* Ventana visual 2D */
+    #scene-view {
+      height: 220px;
+      background: linear-gradient(180deg, #0f111a 0%, #1a1e2e 100%);
+      border-bottom: 2px solid #23283b;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: relative;
+    }
+
+    #location-tag {
+      align-self: flex-start;
+      background-color: #d93838;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    #visual-element {
+      font-size: 4.5rem;
+      text-shadow: 0 0 20px rgba(217, 56, 56, 0.4);
+      margin-bottom: 15px;
+      user-select: none;
+    }
+
+    /* Interfaz de diálogo */
+    #ui-container {
+      padding: 25px;
+    }
+
+    #character-name {
+      color: #58a6ff;
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    #story-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      min-height: 65px;
+    }
+
+    /* Botones de decisión */
+    .choice-btn {
+      display: block;
+      width: 100%;
+      background-color: #1b2030;
+      color: #3fb950;
+      border: 1px solid #30363d;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .choice-btn:hover {
+      background-color: #23293d;
+      border-color: #3fb950;
+      transform: translateX(4px);
+    }
+  </style>
 </head>
 <body>
 
-    <div id="bloqueo-pantalla">
-        Haga clic en la pantalla para activar la cámara libre con el ratón
+  <div id="game-container">
+    <!-- Pantalla 2D -->
+    <div id="scene-view">
+      <div id="location-tag">Escena del Crimen</div>
+      <div id="visual-element">🚨 🍸 🚪</div>
     </div>
 
-    <div id="interface">
-        <strong style="color: #4cc9f0; font-size: 1.1rem;">PROTOTIPO HD-2D ENGINE V5.2</strong><br><br>
-        • <strong>Moverse:</strong> W, A, S, D<br>
-        • <strong>Chat de Voz/Texto:</strong> Presiona <strong style="color: #ffb703;">T</strong> para hablar.<br>
-        • <strong>Entrar a Casas:</strong> Haz <strong style="color: #ffb703;">Click Izquierdo</strong> cerca de la puerta para abrirla.<br>
-        • <strong>Modo Servidor:</strong> Sin bots. Solo tu casa activa (Spawn listo para WebSocket).
+    <!-- Panel de control e historia -->
+    <div id="ui-container">
+      <div id="character-name">Detective Carl</div>
+      <div id="story-text">Cargando caso...</div>
+      <div id="choices-container"></div>
     </div>
+  </div>
+
+  <script>
+    // Lógica e historia del juego
+    const historia = {
+      inicio: {
+        icono: "🚨 🍸 🚪",
+        texto: "Llegas al Bar 'La Sombra'. Las luces de patrulla parpadean contra la lluvia fina de la medianoche. Hay una cinta de escena del crimen bloqueando la entrada principal. Dentro del bar hay un cadáver y varias evidencias intactas.",
+        opciones: [
+          { texto: "Entrar al bar para inspeccionar la escena", destino: "dentroBar" },
+          { texto: "No entrar y revisar el exterior", destino: "fueraBar" }
+        ]
+      },
+      dentroBar: {
+        icono: "🔍 🍷 🩸",
+        texto: "Levantas la cinta policial y empujas la puerta del bar. El olor a alcohol rancio y hierro llena el aire. La víctima yace sobre una mesa volcada, con un vaso roto a poca distancia y una nota ensangrentada en el piso.",
+        opciones: [
+          { texto: "Examinar la nota ensangrentada", destino: "examinarNota" },
+          { texto: "Inspeccionar las marcas en la barra", destino: "barraBar" },
+          { texto: "Volver afuera", destino: "inicio" }
+        ]
+      },
+      fueraBar: {
+        icono: "🌧️ 👟 🗑️",
+        texto: "Decides mantener la distancia e ir al callejón lateral. Entre los contenedores de basura notas huellas de calzado fresco marcadas en el barro y una billetera tirada.",
+        opciones: [
+          { texto: "Recoger la billetera del barro", destino: "billetera" },
+          { texto: "Seguir las huellas hacia la avenida", destino: "callejon" },
+          { texto: "Regresar a la entrada del bar", destino: "inicio" }
+        ]
+      },
+      examinarNota: {
+        icono: "📄 🩸 🕵️‍♂️",
+        texto: "La nota dice a medio escribir: 'Él sabe lo del dinero del...'. Alguien intentó destruir la prueba antes de huir.",
+        opciones: [
+          { texto: "Volver a tomar una decisión", destino: "inicio" }
+        ]
+      },
+      barraBar: {
+        icono: "🥃 🔍 💋",
+        texto: "En la barra hay dos vasos. Uno está limpio, el otro conserva huellas marcadas y restos de labial rojo.",
+        opciones: [
+          { texto: "Volver a tomar una decisión", destino: "inicio" }
+        ]
+      },
+      billetera: {
+        icono: "💳 🆔 🕵️‍♂️",
+        texto: "Abres la billetera. Pertenece a un hombre llamado Manuel R., pero dentro hay una tarjeta de presentación con el sello del bar.",
+        opciones: [
+          { texto: "Volver a tomar una decisión", destino: "inicio" }
+        ]
+      },
+      callejon: {
+        icono: "📻 🏃‍♂️ 🚗",
+        texto: "Las huellas terminan bruscamente cerca de la calle principal. Todo indica que el sospechoso subió a un vehículo en marcha.",
+        opciones: [
+          { texto: "Volver a tomar una decisión", destino: "inicio" }
+        ]
+      }
+    };
+
+    function mostrarEscena(claveEscena) {
+      const escena = historia[claveEscena];
+      const textoElem = document.getElementById("story-text");
+      const opcionesElem = document.getElementById("choices-container");
+      const iconoElem = document.getElementById("visual-element");
+
+      // Actualizar icono de la escena
+      if (escena.icono) {
+        iconoElem.innerText = escena.icono;
+      }
+
+      // Actualizar texto
+      textoElem.innerText = escena.texto;
+
+      // Limpiar botones anteriores
+      opcionesElem.innerHTML = "";
+
+      // Generar botones
+      escena.opciones.forEach(opcion => {
+        const boton = document.createElement("button");
+        boton.innerText = `▶ ${opcion.texto}`;
+        boton.className = "choice-btn";
+        boton.onclick = () => mostrarEscena(opcion.destino);
+        opcionesElem.appendChild(boton);
+      });
+    }
+
+    // Iniciar juego al cargar la página
+    document.addEventListener("DOMContentLoaded", () => {
+      mostrarEscena("inicio");
+    });
+  </script>
 
-    <div id="prompt-interaccion">🖱️ Haz Click para abrir/cerrar la puerta</div>
-
-    <div id="menu-tab">
-        <div class="tab-titulo">⚙️ PANEL DE TU PROPIEDAD</div>
-        <div id="btn-cerradura" class="tab-btn">CERRADURA CENTRAL INTERNA</div>
-    </div>
-
-    <div id="contenedor-chat">
-        <input type="text" id="input-chat" placeholder="Escribe un mensaje para los jugadores cercanos..." maxlength="60">
-    </div>
-
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-            }
-        }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-
-        // 1. CONFIGURACIÓN DEL ESPACIO RENDER
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xbde0fe); 
-        scene.fog = new THREE.FogExp2(0xbde0fe, 0.015);
-
-        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        document.body.appendChild(renderer.domElement);
-
-        // 2. ILUMINACIÓN CINEMÁTICA
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
-        scene.add(ambientLight);
-
-        const sunLight = new THREE.DirectionalLight(0xfff5e6, 1.2);
-        sunLight.position.set(60, 100, 40);
-        sunLight.castShadow = true;
-        sunLight.shadow.mapSize.width = 2048;
-        sunLight.shadow.mapSize.height = 2048;
-        sunLight.shadow.bias = -0.0005;
-        scene.add(sunLight);
-
-        // 3. GENERACIÓN DEL MAPA CON RELIEVES SUAVES Y LAGOS
-        const tamañoMundo = 200;
-        const segmentos = 100;
-        const terrainGeo = new THREE.PlaneGeometry(tamañoMundo, tamañoMundo, segmentos, segmentos);
-        
-        function obtenerAlturaTerreno(x, z) {
-            let y = Math.sin(x * 0.04) * Math.cos(z * 0.04) * 2.5;
-            let cuencasLagos = Math.sin(x * 0.07 + 2) * Math.sin(z * 0.06 * z * 0.01) * 3.5;
-            y += cuencasLagos;
-            y += Math.sin(x * 0.2) * Math.cos(z * 0.2) * 0.3;
-            if (y < -2.5) y = -2.5 + (y + 2.5) * 0.15; 
-            return y;
-        }
-
-        const pos = terrainGeo.attributes.position;
-        for (let i = 0; i < pos.count; i++) {
-            const x = pos.getX(i);
-            const y = pos.getY(i);
-            pos.setZ(i, obtenerAlturaTerreno(x, y));
-        }
-        terrainGeo.computeVertexNormals();
-        terrainGeo.rotateX(-Math.PI / 2);
-
-        const terrainMat = new THREE.MeshStandardMaterial({ 
-            color: 0x7da453, 
-            roughness: 0.9,
-            flatShading: true 
-        });
-        const terreno = new THREE.Mesh(terrainGeo, terrainMat);
-        terreno.receiveShadow = true;
-        scene.add(terreno);
-
-        const waterGeo = new THREE.PlaneGeometry(tamañoMundo, tamañoMundo, 40, 40);
-        const waterMat = new THREE.MeshStandardMaterial({ 
-            color: 0x1d4ed8, 
-            transparent: true, 
-            opacity: 0.75,
-            roughness: 0.15,
-            metalness: 0.2,
-            flatShading: true,
-            side: THREE.DoubleSide
-        });
-        const aguaSuelo = new THREE.Mesh(waterGeo, waterMat);
-        aguaSuelo.rotation.x = -Math.PI / 2;
-        aguaSuelo.position.y = -1.2; 
-        aguaSuelo.receiveShadow = true;
-        scene.add(aguaSuelo);
-
-        const posicionOriginalAgua = waterGeo.attributes.position.clone();
-
-        // CONTROLADORES DE INFRAESTRUCTURA REAL
-        const arrayCasasEstructura = []; 
-        const promptInteract = document.getElementById('prompt-interaccion');
-
-        // GENERACIÓN DE ENTIDADES AMBIENTALES (140 ÁRBOLES)
-        for (let i = 0; i < 140; i++) { 
-            const x = (Math.random() - 0.5) * 150;
-            const z = (Math.random() - 0.5) * 150;
-            const h = obtenerAlturaTerreno(x, z);
-            if (h > -0.8) {
-                const grupo = new THREE.Group();
-                const esc = 0.8 + Math.random() * 0.5;
-                const tron = new THREE.Mesh(new THREE.CylinderGeometry(0.12*esc, 0.25*esc, 2*esc, 5), new THREE.MeshStandardMaterial({ color: 0x4a3525, roughness: 0.9 }));
-                tron.position.y = 1 * esc; tron.castShadow = true; grupo.add(tron);
-                const cop = new THREE.Mesh(new THREE.ConeGeometry(1.2*esc, 2.5*esc, 5), new THREE.MeshStandardMaterial({ color: 0x2d5a27, flatShading: true }));
-                cop.position.y = 2.5 * esc; cop.castShadow = true; grupo.add(cop);
-                grupo.position.set(x, h, z);
-                scene.add(grupo);
-            }
-        }
-
-        // --- CONSTRUCTOR PROCEDURAL DE CASAS CON INTERIOR ---
-        const crearCasitaConInterior = (x, z, h) => {
-            const casa = new THREE.Group();
-
-            // Suelo interno
-            const sueloIntGeo = new THREE.BoxGeometry(2.8, 0.1, 2.8);
-            const sueloIntMat = new THREE.MeshStandardMaterial({ color: 0x8e5531, roughness: 0.5 });
-            const sueloInt = new THREE.Mesh(sueloIntGeo, sueloIntMat);
-            sueloInt.position.y = 0.05;
-            sueloInt.receiveShadow = true;
-            casa.add(sueloInt);
-
-            // Alfombra
-            const alfombraGeo = new THREE.BoxGeometry(1.4, 0.02, 1.4);
-            const alfombraMat = new THREE.MeshStandardMaterial({ color: 0xb7094c, roughness: 0.9 });
-            const alfombra = new THREE.Mesh(alfombraGeo, alfombraMat);
-            alfombra.position.set(0, 0.11, 0);
-            casa.add(alfombra);
-
-            // Paredes
-            const matPared = new THREE.MeshStandardMaterial({ color: 0xf4f1de, roughness: 0.8, flatShading: true });
-            
-            const paredTrasera = new THREE.Mesh(new THREE.BoxGeometry(3, 2.5, 0.1), matPared);
-            paredTrasera.position.set(0, 1.25, -1.45); paredTrasera.castShadow = true; paredTrasera.receiveShadow = true;
-            casa.add(paredTrasera);
-
-            const paredIzquierda = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3), matPared);
-            paredIzquierda.position.set(-1.45, 1.25, 0); paredIzquierda.castShadow = true; paredIzquierda.receiveShadow = true;
-            casa.add(paredIzquierda);
-
-            const paredDerecha = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.5, 3), matPared);
-            paredDerecha.position.set(1.45, 1.25, 0); paredDerecha.castShadow = true; paredDerecha.receiveShadow = true;
-            casa.add(paredDerecha);
-
-            const paredFrontalIzq = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.5, 0.1), matPared);
-            paredFrontalIzq.position.set(-0.95, 1.25, 1.45); paredFrontalIzq.castShadow = true; casa.add(paredFrontalIzq);
-
-            const paredFrontalDer = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.5, 0.1), matPared);
-            paredFrontalDer.position.set(0.95, 1.25, 1.45); paredFrontalDer.castShadow = true; casa.add(paredFrontalDer);
-
-            const dintel = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.9, 0.1), matPared);
-            dintel.position.set(0, 2.05, 1.45); dintel.castShadow = true; casa.add(dintel);
-
-            // Techo
-            const techoGeo = new THREE.ConeGeometry(2.6, 1.8, 4);
-            const techoMat = new THREE.MeshStandardMaterial({ color: 0xe07a5f, roughness: 0.7, flatShading: true });
-            const techo = new THREE.Mesh(techoGeo, techoMat);
-            techo.position.y = 2.5 + 0.4;
-            techo.rotation.y = Math.PI / 4; 
-            techo.castShadow = true;
-            casa.add(techo);
-
-            casa.position.set(x, h, z);
-            scene.add(casa);
-
-            // Registro de datos físicos e interactivos de la casa
-            arrayCasasEstructura.push({ 
-                x: x, 
-                z: z, 
-                h: h, 
-                puertaAbierta: false // Bloqueada por defecto hasta interactuar con click
-            });
-        };
-
-        // --- SOLUCIÓN NO BOTS: ÚNICAMENTE TU CASA REAL ---
-        crearCasitaConInterior(8, 8, obtenerAlturaTerreno(8, 8));
-
-
-        // 5. SISTEMA DE GENERACIÓN DE OUTFIT PROCEDURAL
-        const listaColoresRopa = ['#00b4d8', '#e63946', '#ffb703', '#70e000', '#9b5de5', '#f15bb5', '#00f5d4', '#f77f00'];
-        const listaColoresPelo = ['#4a3525', '#1e1a17', '#e9c46a', '#b56576', '#d62828'];
-        const listaColoresPiel = ['#eab295', '#f3c6a5', '#eddcd2', '#d4a373'];
-
-        const outfitElegido = {
-            pelo: listaColoresPelo[Math.floor(Math.random() * listaColoresPelo.length)],
-            camiseta: listaColoresRopa[Math.floor(Math.random() * listaColoresRopa.length)],
-            pantalon: listaColoresRopa[Math.floor(Math.random() * listaColoresRopa.length)],
-            piel: listaColoresPiel[Math.floor(Math.random() * listaColoresPiel.length)]
-        };
-
-        function crearSpritesheetFiel() {
-            const canvas = document.createElement('canvas'); canvas.width = 320; canvas.height = 128;
-            const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = false;
-
-            function dibujarCuadroPersonaje(offsetX, estado) {
-                const colorPiel = outfitElegido.piel; const colorContorno = '#181216';
-                const colorPelo = outfitElegido.pelo; const colorCamiseta = outfitElegido.camiseta; const colorPantalon = outfitElegido.pantalon;
-
-                if (estado === 'nadar1' || estado === 'nadar2') {
-                    ctx.fillStyle = colorPelo; ctx.fillRect(offsetX + 14, 34, 36, 16);
-                    ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 16, 38, 32, 32);
-                    ctx.fillStyle = colorPiel; ctx.fillRect(offsetX + 18, 40, 28, 28);
-                    ctx.fillStyle = colorPelo; ctx.fillRect(offsetX + 16, 38, 32, 8); ctx.fillRect(offsetX + 16, 46, 6, 8);
-                    ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 24, 50, 4, 6); ctx.fillRect(offsetX + 36, 50, 4, 6); ctx.fillRect(offsetX + 29, 58, 6, 2); 
-                    if (estado === 'nadar1') {
-                        ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 2, 54, 12, 8); ctx.fillRect(offsetX + 46, 68, 8, 12); 
-                        ctx.fillStyle = colorCamiseta; ctx.fillRect(offsetX + 4, 56, 10, 4); ctx.fillRect(offsetX + 46, 68, 6, 10);
-                    } else {
-                        ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 48, 54, 12, 8); ctx.fillRect(offsetX + 10, 68, 8, 12); 
-                        ctx.fillStyle = colorCamiseta; ctx.fillRect(offsetX + 48, 56, 10, 4); ctx.fillRect(offsetX + 12, 68, 6, 10);
-                    }
-                    return;
-                }
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 14, 16, 36, 36);
-                ctx.fillStyle = colorPiel; ctx.fillRect(offsetX + 16, 18, 32, 32);
-                ctx.fillStyle = '#cf9174'; ctx.fillRect(offsetX + 16, 18, 6, 32); ctx.fillRect(offsetX + 16, 44, 32, 6);
-                ctx.fillStyle = colorPelo; ctx.fillRect(offsetX + 14, 14, 36, 10); ctx.fillRect(offsetX + 14, 24, 6, 16); ctx.fillRect(offsetX + 44, 24, 6, 12); ctx.fillRect(offsetX + 20, 24, 12, 4);   
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 25, 30, 4, 6); ctx.fillRect(offsetX + 37, 30, 4, 6); ctx.fillRect(offsetX + 30, 40, 8, 2); 
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 24, 52, 16, 4);
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 18, 56, 28, 40); 
-                ctx.fillStyle = colorCamiseta; ctx.fillRect(offsetX + 20, 58, 24, 26); 
-                ctx.fillStyle = colorPantalon; ctx.fillRect(offsetX + 20, 84, 24, 10);
-                ctx.fillStyle = 'rgba(0,0,0,0.15)'; ctx.fillRect(offsetX + 20, 58, 5, 36);
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 14, 60, 5, 24); ctx.fillRect(offsetX + 45, 60, 5, 24); 
-                ctx.fillStyle = colorCamiseta; ctx.fillRect(offsetX + 15, 61, 3, 10); ctx.fillRect(offsetX + 46, 61, 3, 10); 
-                ctx.fillStyle = '#cf9174'; ctx.fillRect(offsetX + 15, 71, 3, 12); ctx.fillStyle = colorPiel; ctx.fillRect(offsetX + 46, 71, 3, 12); 
-                let izqOffsety = 0, derOffsety = 0;
-                if (estado === 'paso1') izqOffsety = -4; if (estado === 'paso2') derOffsety = -4;
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 21, 96 + izqOffsety, 8, 22);
-                ctx.fillStyle = '#cf9174'; ctx.fillRect(offsetX + 23, 98 + izqOffsety, 4, 18);
-                ctx.fillStyle = colorContorno; ctx.fillRect(offsetX + 35, 96 + derOffsety, 8, 22);
-                ctx.fillStyle = colorPiel; ctx.fillRect(offsetX + 37, 98 + derOffsety, 4, 18);
-            }
-            dibujarCuadroPersonaje(0, 'idle'); dibujarCuadroPersonaje(64, 'paso1'); dibujarCuadroPersonaje(128, 'paso2'); dibujarCuadroPersonaje(192, 'nadar1'); dibujarCuadroPersonaje(256, 'nadar2');
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        const spritesheetTexture = crearSpritesheetFiel();
-        spritesheetTexture.magFilter = THREE.NearestFilter; spritesheetTexture.minFilter = THREE.NearestFilter;
-        spritesheetTexture.repeat.set(1/5, 1); 
-
-        const spriteMat = new THREE.SpriteMaterial({ map: spritesheetTexture, transparent: true, depthWrite: false });
-        const jugadorSprite = new THREE.Sprite(spriteMat);
-        jugadorSprite.scale.set(2, 4, 1); jugadorSprite.renderOrder = 3;
-
-        const jugadorNode = new THREE.Group();
-        jugadorNode.position.set(0, 4, 0); jugadorNode.add(jugadorSprite);
-        scene.add(jugadorNode);
-
-        // 6. PERIFÉRICOS DE ENTRADA Y CONTROLES DEL MOTOR
-        const teclas = { w: false, a: false, s: false, d: false };
-        let mouseCamara = { horizontal: 0, vertical: 0.35 };
-        let chatAbierto = false;
-        let menuTabAbierto = false;
-
-        const divBloqueo = document.getElementById('bloqueo-pantalla');
-        const contChat = document.getElementById('contenedor-chat');
-        const inpChat = document.getElementById('input-chat');
-        const mTab = document.getElementById('menu-tab');
-
-        // --- EXCLUSIVO MECÁNICA 2: DETECCIÓN DE INTERACCIÓN DE RATÓN POR CLICK ---
-        window.addEventListener('mousedown', (e) => {
-            if (document.pointerLockElement !== document.body || chatAbierto || menuTabAbierto) return;
-            
-            // Si el jugador hace click izquierdo (e.button === 0)
-            if (e.button === 0) {
-                arrayCasasEstructura.forEach(casa => {
-                    const distADoor = Math.sqrt(Math.pow(jugadorNode.position.x - casa.x, 2) + Math.pow(jugadorNode.position.z - (casa.z + 1.45), 2));
-                    // Si está en el rango perimetral del umbral de entrada (distancia de interacción < 2.5 unidades)
-                    if (distADoor < 2.5) {
-                        casa.puertaAbierta = !casa.puertaAbierta;
-                        crearBurbujaDeTexto(jugadorNode.position, casa.puertaAbierta ? "🚪 Puerta abierta" : "🔒 Puerta cerrada", true);
-                    }
-                });
-            }
-        });
-
-        window.addEventListener('click', () => { 
-            if (!chatAbierto && !menuTabAbierto) document.body.requestPointerLock(); 
-        });
-
-        document.addEventListener('pointerlockchange', () => {
-            if (document.pointerLockElement === document.body) {
-                divBloqueo.style.opacity = '0'; divBloqueo.style.pointerEvents = 'none';
-            } else {
-                if(!chatAbierto && !menuTabAbierto) { divBloqueo.style.opacity = '1'; divBloqueo.style.pointerEvents = 'auto'; }
-            }
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (document.pointerLockElement === document.body) {
-                mouseCamara.horizontal -= e.movementX * 0.0035;
-                mouseCamara.vertical -= e.movementY * 0.0035;
-                mouseCamara.vertical = Math.max(0.18, Math.min(Math.PI / 2.3, mouseCamara.vertical));
-            }
-        });
-
-        window.addEventListener('keydown', (e) => {
-            const k = e.key.toLowerCase();
-            if (chatAbierto) {
-                if (e.key === 'Enter') enviarMensajeChat();
-                if (e.key === 'Escape') cerrarChat();
-                return;
-            }
-            if (k === 't') { e.preventDefault(); abrirChat(); return; }
-            if (e.key === 'Tab') { e.preventDefault(); toggleMenuTab(); return; }
-            if (teclas.hasOwnProperty(k)) teclas[k] = true;
-        });
-
-        window.addEventListener('keyup', (e) => {
-            const k = e.key.toLowerCase();
-            if (teclas.hasOwnProperty(k)) teclas[k] = false;
-        });
-
-        function abrirChat() {
-            chatAbierto = true; contChat.style.display = 'flex'; inpChat.value = "";
-            document.exitPointerLock(); setTimeout(() => inpChat.focus(), 50);
-        }
-        function cerrarChat() {
-            chatAbierto = false; contChat.style.display = 'none'; document.body.requestPointerLock();
-        }
-        function enviarMensajeChat() {
-            const msg = inpChat.value.trim();
-            if(msg !== "") {
-                crearBurbujaDeTexto(jugadorNode.position, msg, true);
-            }
-            cerrarChat();
-        }
-
-        const listaBurbujasActivas = [];
-        function crearBurbujaDeTexto(posicion3D, texto, esPropio) {
-            const el = document.createElement('div'); el.className = 'burbuja-texto';
-            if (!esPropio) el.style.border = "2px solid #ffb703";
-            el.innerText = texto; document.body.appendChild(el);
-            
-            const bRef = { element: el, pos3D: posicion3D.clone(), tiempo: Date.now() };
-            listaBurbujasActivas.push(bRef);
-            
-            setTimeout(() => {
-                el.remove();
-                const idx = listaBurbujasActivas.indexOf(bRef); if(idx > -1) listaBurbujasActivas.splice(idx, 1);
-            }, 5000);
-        }
-
-        function toggleMenuTab() {
-            menuTabAbierto = !menuTabAbierto;
-            if(menuTabAbierto) {
-                mTab.style.display = 'flex'; document.exitPointerLock();
-            } else {
-                mTab.style.display = 'none'; document.body.requestPointerLock();
-            }
-        }
-
-        let cronometroAnim = 0;
-
-        // 7. BUCLE DINÁMICO DE RENDER
-        function animate() {
-            requestAnimationFrame(animate);
-            const tiempo = performance.now() * 0.002;
-
-            // Oleaje del mar
-            const posicionAgua = waterGeo.attributes.position;
-            for (let i = 0; i < posicionAgua.count; i++) {
-                const u = posicionOriginalAgua.getX(i); const v = posicionOriginalAgua.getY(i);
-                posicionAgua.setZ(i, Math.sin(u * 0.1 + tiempo) * Math.cos(v * 0.1 + tiempo) * 0.15 + Math.sin(u * 0.05 - tiempo) * 0.1);
-            }
-            waterGeo.computeVertexNormals(); posicionAgua.needsUpdate = true;
-
-            // Movimiento
-            let vectorDireccion = new THREE.Vector3();
-            let camaraFrente = new THREE.Vector3(); let camaraDerecha = new THREE.Vector3();
-            camera.getWorldDirection(camaraFrente); camaraFrente.y = 0; camaraFrente.normalize();
-            camaraDerecha.crossVectors(camaraFrente, camera.up).normalize().negate();
-
-            let estaCaminando = false;
-            if (!chatAbierto && !menuTabAbierto) {
-                if (teclas.w) { vectorDireccion.add(camaraFrente); estaCaminando = true; }
-                if (teclas.s) { vectorDireccion.add(camaraFrente.clone().negate()); estaCaminando = true; }
-                if (teclas.a) { vectorDireccion.add(camaraDerecha.clone().negate()); estaCaminando = true; }
-                if (teclas.d) { vectorDireccion.add(camaraDerecha); estaCaminando = true; }
-            }
-
-            const viejaX = jugadorNode.position.x;
-            const viejaZ = jugadorNode.position.z;
-
-            if (estaCaminando) {
-                vectorDireccion.normalize();
-                jugadorNode.position.addScaledVector(vectorDireccion, 0.2);
-                if (vectorDireccion.dot(camaraDerecha) < -0.1) jugadorSprite.scale.x = -2; 
-                if (vectorDireccion.dot(camaraDerecha) > 0.1) jugadorSprite.scale.x = 2;   
-            }
-
-            // --- MOTOR DE COLISIONES REALES CON FILTRADO DE CLICK DE PUERTA ---
-            let hSuelo = obtenerAlturaTerreno(jugadorNode.position.x, jugadorNode.position.z);
-            let mostrarPromptUI = false;
-
-            arrayCasasEstructura.forEach(casa => {
-                const distPerimetro = Math.sqrt(Math.pow(jugadorNode.position.x - casa.x, 2) + Math.pow(jugadorNode.position.z - casa.z, 2));
-                const distADoor = Math.sqrt(Math.pow(jugadorNode.position.x - casa.x, 2) + Math.pow(jugadorNode.position.z - (casa.z + 1.45), 2));
-                
-                // Mostrar UI informativa si el jugador está parado frente a la puerta
-                if (distADoor < 2.2) {
-                    mostrarPromptUI = true;
-                }
-
-                if (distPerimetro < 1.6) {
-                    const relX = jugadorNode.position.x - casa.x;
-                    const relZ = jugadorNode.position.z - casa.z;
-                    
-                    // Condición de entrada: Cruza únicamente si la puerta está marcada como abierta por un Click
-                    if (relZ > 1.2 && Math.abs(relX) < 0.4 && casa.puertaAbierta) {
-                        hSuelo = casa.h;
-                    } else {
-                        // Si está bloqueada o choca con los muros laterales, frena el movimiento
-                        if (Math.abs(relX) > 1.3 || relZ < -1.3 || relZ > 1.3 || (Math.abs(relX) > 0.3 && relZ > 1.2) || !casa.puertaAbierta) {
-                            jugadorNode.position.x = viejaX;
-                            jugadorNode.position.z = viejaZ;
-                        } else {
-                            hSuelo = casa.h; // Está adentro pisando la madera
-                        }
-                    }
-                }
-            });
-
-            // Visibilidad del prompt flotante HUD de interacción
-            promptInteract.style.display = mostrarPromptUI ? 'block' : 'none';
-
-            const enElAgua = hSuelo < -1.2; 
-            if (enElAgua) {
-                jugadorNode.position.y = -1.2 + 0.5 + Math.sin(tiempo * 3) * 0.06; waterMat.opacity = 0.85;
-            } else {
-                jugadorNode.position.y = hSuelo + 2.0; waterMat.opacity = 0.70;
-            }
-
-            // Gestión de Animación de Spritesheets
-            cronometroAnim += 0.14;
-            if (enElAgua) {
-                spritesheetTexture.offset.x = (Math.floor(cronometroAnim * 0.8 % 2) + 3) / 5;
-            } else if (estaCaminando) {
-                spritesheetTexture.offset.x = (Math.floor(cronometroAnim % 2) + 1) / 5;
-                jugadorSprite.position.y = Math.abs(Math.sin(cronometroAnim * 1.5)) * 0.08; 
-            } else {
-                spritesheetTexture.offset.x = 0.0; jugadorSprite.position.y = Math.sin(cronometroAnim * 0.25) * 0.03; 
-            }
-
-            // Orbitación de cámara
-            const radioCamara = 11;
-            const objCamX = jugadorNode.position.x + radioCamara * Math.sin(mouseCamara.horizontal) * Math.cos(mouseCamara.vertical);
-            const objCamY = jugadorNode.position.y + radioCamara * Math.sin(mouseCamara.vertical);
-            const objCamZ = jugadorNode.position.z + radioCamara * Math.cos(mouseCamara.horizontal) * Math.cos(mouseCamara.vertical);
-
-            camera.position.x += (objCamX - camera.position.x) * 0.09;
-            camera.position.y += (objCamY - camera.position.y) * 0.09;
-            camera.position.z += (objCamZ - camera.position.z) * 0.09;
-            camera.lookAt(jugadorNode.position.x, jugadorNode.position.y + (enElAgua ? -0.4 : 0.2), jugadorNode.position.z);
-
-            renderer.render(scene, camera);
-
-            // Proyección de Chat 2.5D
-            listaBurbujasActivas.forEach(burbuja => {
-                const vProyectado = burbuja.pos3D.clone();
-                vProyectado.y += 2.5;
-                vProyectado.project(camera);
-
-                const xPixel = (vProyectado.x * .5 + .5) * window.innerWidth;
-                const yPixel = (-(vProyectado.y * .5) + .5) * window.innerHeight;
-
-                if(vProyectado.z > 1) {
-                    burbuja.element.style.display = 'none';
-                } else {
-                    burbuja.element.style.display = 'block';
-                    burbuja.element.style.left = `${xPixel - (burbuja.element.offsetWidth / 2)}px`;
-                    burbuja.element.style.top = `${yPixel}px`;
-                }
-            });
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
 </body>
 </html>
