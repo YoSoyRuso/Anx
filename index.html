@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Investigación Criminal - El Bar</title>
+  <title>Operación Carl - FPS Shooter</title>
   <style>
     * {
       box-sizing: border-box;
+      user-select: none;
     }
 
     body {
@@ -25,196 +26,541 @@
       background-color: #12151e;
       border: 2px solid #23283b;
       border-radius: 10px;
-      max-width: 750px;
+      max-width: 800px;
       width: 100%;
       overflow: hidden;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-    }
-
-    /* Ventana visual 2D */
-    #scene-view {
-      height: 220px;
-      background: linear-gradient(180deg, #0f111a 0%, #1a1e2e 100%);
-      border-bottom: 2px solid #23283b;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
       position: relative;
     }
 
-    #location-tag {
-      align-self: flex-start;
-      background-color: #d93838;
-      color: #ffffff;
-      font-size: 0.75rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      padding: 4px 10px;
-      border-radius: 4px;
+    #viewport-wrapper {
+      position: relative;
+      width: 100%;
+      height: 450px;
+      background-color: #000;
+      cursor: crosshair;
     }
 
-    #visual-element {
-      font-size: 4.5rem;
-      text-shadow: 0 0 20px rgba(217, 56, 56, 0.4);
-      margin-bottom: 15px;
-      user-select: none;
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
-    /* Interfaz de diálogo */
-    #ui-container {
-      padding: 25px;
+    /* HUD Superior */
+    #hud-top {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
     }
 
-    #character-name {
+    .badge {
+      background-color: rgba(13, 17, 23, 0.85);
+      border: 1px solid #30363d;
       color: #58a6ff;
       font-weight: bold;
-      font-size: 0.9rem;
-      text-transform: uppercase;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 6px;
       letter-spacing: 1px;
-      margin-bottom: 8px;
     }
 
-    #story-text {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 25px;
-      min-height: 65px;
+    #stats {
+      display: flex;
+      gap: 10px;
     }
 
-    /* Botones de decisión */
-    .choice-btn {
-      display: block;
-      width: 100%;
-      background-color: #1b2030;
-      color: #3fb950;
+    .stat-box {
+      background-color: rgba(13, 17, 23, 0.85);
       border: 1px solid #30363d;
-      padding: 14px 18px;
-      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    #hp { color: #f85149; }
+    #score { color: #3fb950; }
+
+    /* Crosshair Center */
+    #crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    #crosshair::before, #crosshair::after {
+      content: '';
+      position: absolute;
+      background-color: rgba(63, 185, 80, 0.8);
+    }
+
+    #crosshair::before { top: 5px; left: 0; width: 12px; height: 2px; }
+    #crosshair::after { top: 0; left: 5px; width: 2px; height: 12px; }
+
+    /* Overlay de Pantalla Completa (Inicio / Game Over) */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(8, 9, 12, 0.92);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .overlay h1 {
+      margin: 0 0 10px 0;
+      color: #f85149;
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .overlay p {
+      color: #8b949e;
+      margin-bottom: 25px;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+
+    .btn {
+      background-color: #238636;
+      color: #ffffff;
+      border: 1px solid #3fb950;
+      padding: 12px 24px;
       border-radius: 6px;
       font-size: 1rem;
-      text-align: left;
+      font-weight: bold;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .choice-btn:hover {
-      background-color: #23293d;
-      border-color: #3fb950;
-      transform: translateX(4px);
+    .btn:hover {
+      background-color: #2ea043;
+      transform: translateY(-2px);
+    }
+
+    /* Panel Inferior de Controles */
+    #ui-container {
+      padding: 15px 20px;
+      background-color: #12151e;
+      border-top: 2px solid #23283b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .key {
+      background: #21262d;
+      border: 1px solid #30363d;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #c9d1d9;
     }
   </style>
 </head>
 <body>
 
   <div id="game-container">
-    <!-- Pantalla 2D -->
-    <div id="scene-view">
-      <div id="location-tag">Escena del Crimen</div>
-      <div id="visual-element">🚨 🍸 🚪</div>
+    <div id="viewport-wrapper">
+      <canvas id="viewport" width="640" height="360"></canvas>
+      
+      <!-- Crosshair -->
+      <div id="crosshair"></div>
+
+      <!-- HUD Top -->
+      <div id="hud-top">
+        <div class="badge">DETECTIVE CARL</div>
+        <div id="stats">
+          <div class="stat-box">SALUD: <span id="hp">100</span>%</div>
+          <div class="stat-box">BAJAS: <span id="score">0</span></div>
+        </div>
+      </div>
+
+      <!-- Overlay Inicio -->
+      <div id="start-overlay" class="overlay">
+        <h1>INFILTRACIÓN EN EL BAR</h1>
+        <p>Los sospechosos han tomado la zona. Elimina a los enemigos antes de que te rodeen. Haz clic para apuntar y disparar.</p>
+        <button class="btn" onclick="iniciarJuego()">COMENZAR MISIÓN</button>
+      </div>
+
+      <!-- Overlay Game Over -->
+      <div id="gameover-overlay" class="overlay" style="display: none;">
+        <h1 id="gameover-title">CARL HA CAÍDO</h1>
+        <p id="gameover-desc">Has sido eliminado por los sospechosos.</p>
+        <button class="btn" onclick="reiniciarJuego()">REINTENTAR</button>
+      </div>
     </div>
 
-    <!-- Panel de control e historia -->
+    <!-- Instrucciones -->
     <div id="ui-container">
-      <div id="character-name">Detective Carl</div>
-      <div id="story-text">Cargando caso...</div>
-      <div id="choices-container"></div>
+      <div><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> Moverse</div>
+      <div><span class="key">CLICK IZQ</span> DisparAR Pistola</div>
+      <div><span class="key">MOUSE</span> Rotar Cámara</div>
     </div>
   </div>
 
   <script>
-    // Lógica e historia del juego
-    const historia = {
-      inicio: {
-        icono: "🚨 🍸 🚪",
-        texto: "Llegas al Bar 'La Sombra'. Las luces de patrulla parpadean contra la lluvia fina de la medianoche. Hay una cinta de escena del crimen bloqueando la entrada principal. Dentro del bar hay un cadáver y varias evidencias intactas.",
-        opciones: [
-          { texto: "Entrar al bar para inspeccionar la escena", destino: "dentroBar" },
-          { texto: "No entrar y revisar el exterior", destino: "fueraBar" }
-        ]
-      },
-      dentroBar: {
-        icono: "🔍 🍷 🩸",
-        texto: "Levantas la cinta policial y empujas la puerta del bar. El olor a alcohol rancio y hierro llena el aire. La víctima yace sobre una mesa volcada, con un vaso roto a poca distancia y una nota ensangrentada en el piso.",
-        opciones: [
-          { texto: "Examinar la nota ensangrentada", destino: "examinarNota" },
-          { texto: "Inspeccionar las marcas en la barra", destino: "barraBar" },
-          { texto: "Volver afuera", destino: "inicio" }
-        ]
-      },
-      fueraBar: {
-        icono: "🌧️ 👟 🗑️",
-        texto: "Decides mantener la distancia e ir al callejón lateral. Entre los contenedores de basura notas huellas de calzado fresco marcadas en el barro y una billetera tirada.",
-        opciones: [
-          { texto: "Recoger la billetera del barro", destino: "billetera" },
-          { texto: "Seguir las huellas hacia la avenida", destino: "callejon" },
-          { texto: "Regresar a la entrada del bar", destino: "inicio" }
-        ]
-      },
-      examinarNota: {
-        icono: "📄 🩸 🕵️‍♂️",
-        texto: "La nota dice a medio escribir: 'Él sabe lo del dinero del...'. Alguien intentó destruir la prueba antes de huir.",
-        opciones: [
-          { texto: "Volver a tomar una decisión", destino: "inicio" }
-        ]
-      },
-      barraBar: {
-        icono: "🥃 🔍 💋",
-        texto: "En la barra hay dos vasos. Uno está limpio, el otro conserva huellas marcadas y restos de labial rojo.",
-        opciones: [
-          { texto: "Volver a tomar una decisión", destino: "inicio" }
-        ]
-      },
-      billetera: {
-        icono: "💳 🆔 🕵️‍♂️",
-        texto: "Abres la billetera. Pertenece a un hombre llamado Manuel R., pero dentro hay una tarjeta de presentación con el sello del bar.",
-        opciones: [
-          { texto: "Volver a tomar una decisión", destino: "inicio" }
-        ]
-      },
-      callejon: {
-        icono: "📻 🏃‍♂️ 🚗",
-        texto: "Las huellas terminan bruscamente cerca de la calle principal. Todo indica que el sospechoso subió a un vehículo en marcha.",
-        opciones: [
-          { texto: "Volver a tomar una decisión", destino: "inicio" }
-        ]
-      }
+    const canvas = document.getElementById("viewport");
+    const ctx = canvas.getContext("2d");
+
+    // Estado del juego
+    let jugando = false;
+    let salud = 100;
+    let bajas = 0;
+    let ultimoDisparo = 0;
+    let disparando = false;
+
+    // Configuración del jugador (Carl)
+    const jugador = {
+      x: 2.5,
+      y: 2.5,
+      dirX: -1,
+      dirY: 0,
+      planoX: 0,
+      planoY: 0.66,
+      rotSpeed: 0.003
     };
 
-    function mostrarEscena(claveEscena) {
-      const escena = historia[claveEscena];
-      const textoElem = document.getElementById("story-text");
-      const opcionesElem = document.getElementById("choices-container");
-      const iconoElem = document.getElementById("visual-element");
+    // Mapa 2D del Bar (1 = Pared, 0 = Espacio Libre)
+    const mapa = [
+      [1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,0,1,0,0,0,1],
+      [1,0,1,1,0,1,0,1,0,1],
+      [1,0,1,0,0,0,0,1,0,1],
+      [1,0,1,0,1,1,0,1,0,1],
+      [1,0,0,0,0,1,0,0,0,1],
+      [1,1,1,0,1,1,1,1,0,1],
+      [1,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1]
+    ];
+    const mapW = 10, mapH = 9;
 
-      // Actualizar icono de la escena
-      if (escena.icono) {
-        iconoElem.innerText = escena.icono;
+    // Lista de Enemigos
+    let enemigos = [];
+
+    function crearEnemigo() {
+      const posicionesLibres = [
+        {x: 7.5, y: 1.5},
+        {x: 8.5, y: 5.5},
+        {x: 1.5, y: 7.5},
+        {x: 7.5, y: 7.5}
+      ];
+      const pos = posicionesLibres[Math.floor(Math.random() * posicionesLibres.length)];
+      return {
+        x: pos.x,
+        y: pos.y,
+        salud: 100,
+        alerta: true,
+        ultimoAtaque: 0
+      };
+    }
+
+    // Teclas
+    const teclas = {};
+    window.addEventListener("keydown", e => teclas[e.key.toLowerCase()] = true);
+    window.addEventListener("keyup", e => teclas[e.key.toLowerCase()] = false);
+
+    // Controles de puntería con ratón
+    const viewportWrapper = document.getElementById("viewport-wrapper");
+    viewportWrapper.addEventListener("mousemove", e => {
+      if (!jugando) return;
+      const movementX = e.movementX || 0;
+      if (movementX !== 0) {
+        rotarJugador(-movementX * jugador.rotSpeed);
+      }
+    });
+
+    viewportWrapper.addEventListener("mousedown", e => {
+      if (!jugando) return;
+      if (e.button === 0) disparar();
+    });
+
+    function rotarJugador(angulo) {
+      const oldDirX = jugador.dirX;
+      jugador.dirX = jugador.dirX * Math.cos(angulo) - jugador.dirY * Math.sin(angulo);
+      jugador.dirY = oldDirX * Math.sin(angulo) + jugador.dirY * Math.cos(angulo);
+      const oldPlanoX = jugador.planoX;
+      jugador.planoX = jugador.planoX * Math.cos(angulo) - jugador.planoY * Math.sin(angulo);
+      jugador.planoY = oldPlanoX * Math.sin(angulo) + jugador.planoY * Math.cos(angulo);
+    }
+
+    function disparar() {
+      const ahora = Date.now();
+      if (ahora - ultimoDisparo < 250) return; // Cadencia de tiro
+      ultimoDisparo = ahora;
+      disparando = true;
+
+      setTimeout(() => disparando = false, 100);
+
+      // Comprobar impacto en enemigos (Raycast central)
+      enemigos.forEach((e) => {
+        const dx = e.x - jugador.x;
+        const dy = e.y - jugador.y;
+        
+        // Calcular ángulo relativo al jugador
+        const angleToEnemy = Math.atan2(dy, dx);
+        const playerAngle = Math.atan2(jugador.dirY, jugador.dirX);
+        let diffAngle = angleToEnemy - playerAngle;
+
+        while (diffAngle < -Math.PI) diffAngle += Math.PI * 2;
+        while (diffAngle > Math.PI) diffAngle -= Math.PI * 2;
+
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Si está cerca del centro de la mirilla
+        if (Math.abs(diffAngle) < 0.25 && dist < 7) {
+          e.salud -= 50;
+          if (e.salud <= 0) {
+            bajas++;
+            document.getElementById("score").innerText = bajas;
+          }
+        }
+      });
+
+      // Limpiar enemigos muertos y reponer
+      enemigos = enemigos.filter(e => e.salud > 0);
+      if (enemigos.length < 3) {
+        enemigos.push(crearEnemigo());
+      }
+    }
+
+    function actualizar() {
+      if (!jugando) return;
+
+      const moveSpeed = 0.04;
+
+      // Movimiento W, A, S, D
+      if (teclas["w"]) {
+        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x + jugador.dirX * moveSpeed)] === 0) jugador.x += jugador.dirX * moveSpeed;
+        if (mapa[Math.floor(jugador.y + jugador.dirY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y += jugador.dirY * moveSpeed;
+      }
+      if (teclas["s"]) {
+        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x - jugador.dirX * moveSpeed)] === 0) jugador.x -= jugador.dirX * moveSpeed;
+        if (mapa[Math.floor(jugador.y - jugador.dirY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y -= jugador.dirY * moveSpeed;
+      }
+      if (teclas["a"]) {
+        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x - jugador.planoX * moveSpeed)] === 0) jugador.x -= jugador.planoX * moveSpeed;
+        if (mapa[Math.floor(jugador.y - jugador.planoY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y -= jugador.planoY * moveSpeed;
+      }
+      if (teclas["d"]) {
+        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x + jugador.planoX * moveSpeed)] === 0) jugador.x += jugador.planoX * moveSpeed;
+        if (mapa[Math.floor(jugador.y + jugador.planoY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y += jugador.planoY * moveSpeed;
       }
 
-      // Actualizar texto
-      textoElem.innerText = escena.texto;
+      // IA Enemigos
+      const ahora = Date.now();
+      enemigos.forEach(e => {
+        const dx = jugador.x - e.x;
+        const dy = jugador.y - e.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Limpiar botones anteriores
-      opcionesElem.innerHTML = "";
+        // Mover hacia Carl
+        if (dist > 0.8) {
+          e.x += (dx / dist) * 0.015;
+          e.y += (dy / dist) * 0.015;
+        } else {
+          // Atacar a Carl
+          if (ahora - e.ultimoAtaque > 800) {
+            salud -= 15;
+            e.ultimoAtaque = ahora;
+            document.getElementById("hp").innerText = Math.max(0, salud);
 
-      // Generar botones
-      escena.opciones.forEach(opcion => {
-        const boton = document.createElement("button");
-        boton.innerText = `▶ ${opcion.texto}`;
-        boton.className = "choice-btn";
-        boton.onclick = () => mostrarEscena(opcion.destino);
-        opcionesElem.appendChild(boton);
+            if (salud <= 0) {
+              finalizarJuego();
+            }
+          }
+        }
       });
     }
 
-    // Iniciar juego al cargar la página
-    document.addEventListener("DOMContentLoaded", () => {
-      mostrarEscena("inicio");
-    });
-  </script>
+    // Renderizador 3D Raycasting
+    function renderizar() {
+      const w = canvas.width;
+      const h = canvas.height;
 
+      // Techo y Suelo
+      ctx.fillStyle = "#10141d";
+      ctx.fillRect(0, 0, w, h / 2);
+      ctx.fillStyle = "#08090c";
+      ctx.fillRect(0, h / 2, w, h / 2);
+
+      // Renderizar Paredes
+      const zBuffer = new Array(w);
+
+      for (let x = 0; x < w; x++) {
+        const cameraX = 2 * x / w - 1;
+        const rayDirX = jugador.dirX + jugador.planoX * cameraX;
+        const rayDirY = jugador.dirY + jugador.planoY * cameraX;
+
+        let mapX = Math.floor(jugador.x);
+        let mapY = Math.floor(jugador.y);
+
+        let sideDistX, sideDistY;
+
+        const deltaDistX = Math.abs(1 / rayDirX);
+        const deltaDistY = Math.abs(1 / rayDirY);
+        let perpWallDist;
+
+        let stepX, stepY;
+        let hit = 0;
+        let side = 0;
+
+        if (rayDirX < 0) { stepX = -1; sideDistX = (jugador.x - mapX) * deltaDistX; }
+        else { stepX = 1; sideDistX = (mapX + 1.0 - jugador.x) * deltaDistX; }
+
+        if (rayDirY < 0) { stepY = -1; sideDistY = (jugador.y - mapY) * deltaDistY; }
+        else { stepY = 1; sideDistY = (mapY + 1.0 - jugador.y) * deltaDistY; }
+
+        while (hit === 0) {
+          if (sideDistX < sideDistY) {
+            sideDistX += deltaDistX;
+            mapX += stepX;
+            side = 0;
+          } else {
+            sideDistY += deltaDistY;
+            mapY += stepY;
+            side = 1;
+          }
+          if (mapa[mapY][mapX] > 0) hit = 1;
+        }
+
+        if (side === 0) perpWallDist = (mapX - jugador.x + (1 - stepX) / 2) / rayDirX;
+        else perpWallDist = (mapY - jugador.y + (1 - stepY) / 2) / rayDirY;
+
+        zBuffer[x] = perpWallDist;
+
+        const lineHeight = Math.floor(h / perpWallDist);
+        let drawStart = -lineHeight / 2 + h / 2;
+        if (drawStart < 0) drawStart = 0;
+        let drawEnd = lineHeight / 2 + h / 2;
+        if (drawEnd >= h) drawEnd = h - 1;
+
+        // Color de pared con sombra según distancia
+        let baseColor = side === 1 ? 40 : 65;
+        let shade = Math.max(0, Math.min(255, baseColor - perpWallDist * 6));
+        ctx.fillStyle = `rgb(${shade}, ${shade + 10}, ${shade + 25})`;
+        ctx.fillRect(x, drawStart, 1, drawEnd - drawStart);
+      }
+
+      // Renderizar Enemigos (Sprites)
+      enemigos.sort((a, b) => {
+        const distA = Math.pow(jugador.x - a.x, 2) + Math.pow(jugador.y - a.y, 2);
+        const distB = Math.pow(jugador.x - b.x, 2) + Math.pow(jugador.y - b.y, 2);
+        return distB - distA;
+      });
+
+      enemigos.forEach(e => {
+        const spriteX = e.x - jugador.x;
+        const spriteY = e.y - jugador.y;
+
+        const invDet = 1.0 / (jugador.planoX * jugador.dirY - jugador.dirX * jugador.planoY);
+        const transformX = invDet * (jugador.dirY * spriteX - jugador.dirX * spriteY);
+        const transformY = invDet * (-jugador.planoY * spriteX + jugador.planoX * spriteY);
+
+        if (transformY > 0) {
+          const spriteScreenX = Math.floor((w / 2) * (1 + transformX / transformY));
+          const spriteHeight = Math.abs(Math.floor(h / transformY));
+          const drawStartY = Math.max(0, -spriteHeight / 2 + h / 2);
+          const drawEndY = Math.min(h - 1, spriteHeight / 2 + h / 2);
+
+          const spriteWidth = Math.abs(Math.floor(h / transformY));
+          let drawStartX = Math.floor(-spriteWidth / 2 + spriteScreenX);
+          let drawEndX = spriteWidth / 2 + spriteScreenX;
+
+          for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
+            if (stripe > 0 && stripe < w && transformY < zBuffer[stripe]) {
+              // Dibuja silueta enemiga
+              ctx.fillStyle = "#d93838";
+              ctx.fillRect(stripe, drawStartY + spriteHeight * 0.2, 1, (drawEndY - drawStartY) * 0.7);
+              // Cabeza
+              ctx.fillStyle = "#f85149";
+              ctx.fillRect(stripe, drawStartY, 1, spriteHeight * 0.2);
+            }
+          }
+        }
+      });
+
+      // Dibujar Pistola de Carl
+      dibujarPistola(w, h);
+    }
+
+    function dibujarPistola(w, h) {
+      ctx.save();
+      const gunX = w / 2 + 60;
+      const gunY = h - (disparando ? 110 : 130);
+
+      // Destello de disparo
+      if (disparando) {
+        ctx.fillStyle = "#ffcc00";
+        ctx.beginPath();
+        ctx.arc(gunX - 25, gunY - 30, 25, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Cañón
+      ctx.fillStyle = "#21262d";
+      ctx.fillRect(gunX - 35, gunY - 20, 20, 50);
+      // Cuerpo
+      ctx.fillStyle = "#30363d";
+      ctx.fillRect(gunX - 40, gunY, 30, 70);
+      // Empuñadura
+      ctx.fillStyle = "#161b22";
+      ctx.fillRect(gunX - 30, gunY + 40, 25, 60);
+
+      ctx.restore();
+    }
+
+    function bucleJuego() {
+      actualizar();
+      renderizar();
+      if (jugando) requestAnimationFrame(bucleJuego);
+    }
+
+    function iniciarJuego() {
+      document.getElementById("start-overlay").style.display = "none";
+      document.getElementById("gameover-overlay").style.display = "none";
+      salud = 100;
+      bajas = 0;
+      document.getElementById("hp").innerText = salud;
+      document.getElementById("score").innerText = bajas;
+      enemigos = [crearEnemigo(), crearEnemigo()];
+      jugando = true;
+
+      // Solicitar Pointer Lock opcional para mejor experiencia
+      viewportWrapper.requestPointerLock = viewportWrapper.requestPointerLock || viewportWrapper.mozRequestPointerLock;
+      if (viewportWrapper.requestPointerLock) {
+        viewportWrapper.requestPointerLock();
+      }
+
+      requestAnimationFrame(bucleJuego);
+    }
+
+    function finalizarJuego() {
+      jugando = false;
+      document.getElementById("gameover-overlay").style.display = "flex";
+      document.getElementById("gameover-title").innerText = "CARL HA CAÍDO";
+      document.getElementById("gameover-desc").innerText = `Lograste neutralizar a ${bajas} sospechosos antes de ser abatido.`;
+      if (document.exitPointerLock) document.exitPointerLock();
+    }
+
+    function reiniciarJuego() {
+      iniciarJuego();
+    }
+  </script>
 </body>
 </html>
