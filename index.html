@@ -3,564 +3,406 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operación Carl - FPS Shooter</title>
+  <title>Playoo 🎮 - Tu Universo 2D</title>
+  <!-- Fuente caricaturesca/gamer desde Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Fredoka', cursive, sans-serif;
       user-select: none;
     }
 
     body {
-      background-color: #08090c;
-      color: #e1e4e8;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background-color: #2f3542;
+      background-image: radial-gradient(#3a4052 2px, transparent 2px);
+      background-size: 24px 24px;
+      color: #ffffff;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      padding: 15px;
     }
 
-    #game-container {
-      background-color: #12151e;
-      border: 2px solid #23283b;
-      border-radius: 10px;
-      max-width: 800px;
+    /* BARRA DE NAVEGACIÓN ESTILO CARTOON */
+    header {
       width: 100%;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-      position: relative;
-    }
-
-    #viewport-wrapper {
-      position: relative;
-      width: 100%;
-      height: 450px;
-      background-color: #000;
-      cursor: crosshair;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    /* HUD Superior */
-    #hud-top {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
+      background-color: #ff4757;
+      padding: 15px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      pointer-events: none;
+      border-bottom: 5px solid #2f3542;
+      box-shadow: 0 6px 0px #1e222d;
     }
 
-    .badge {
-      background-color: rgba(13, 17, 23, 0.85);
-      border: 1px solid #30363d;
-      color: #58a6ff;
-      font-weight: bold;
-      font-size: 0.85rem;
-      padding: 6px 12px;
-      border-radius: 6px;
-      letter-spacing: 1px;
-    }
-
-    #stats {
-      display: flex;
-      gap: 10px;
-    }
-
-    .stat-box {
-      background-color: rgba(13, 17, 23, 0.85);
-      border: 1px solid #30363d;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: bold;
-    }
-
-    #hp { color: #f85149; }
-    #score { color: #3fb950; }
-
-    /* Crosshair Center */
-    #crosshair {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 12px;
-      height: 12px;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    #crosshair::before, #crosshair::after {
-      content: '';
-      position: absolute;
-      background-color: rgba(63, 185, 80, 0.8);
-    }
-
-    #crosshair::before { top: 5px; left: 0; width: 12px; height: 2px; }
-    #crosshair::after { top: 0; left: 5px; width: 2px; height: 12px; }
-
-    /* Overlay de Pantalla Completa (Inicio / Game Over) */
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background-color: rgba(8, 9, 12, 0.92);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 30px;
-      text-align: center;
-      z-index: 10;
-    }
-
-    .overlay h1 {
-      margin: 0 0 10px 0;
-      color: #f85149;
-      font-size: 2rem;
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffa502;
+      text-shadow: 3px 3px 0px #2f3542, -2px -2px 0px #2f3542, 2px -2px 0px #2f3542, -2px 2px 0px #2f3542;
       letter-spacing: 2px;
+      transform: rotate(-2deg);
     }
 
-    .overlay p {
-      color: #8b949e;
-      margin-bottom: 25px;
-      max-width: 500px;
-      line-height: 1.5;
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
+    /* BOTONES CARICATURAS (Efecto Click 3D) */
     .btn {
-      background-color: #238636;
+      background-color: #2ed573;
       color: #ffffff;
-      border: 1px solid #3fb950;
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
+      border: 3px solid #2f3542;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      box-shadow: 0 5px 0px #1e222d;
+      transition: all 0.1s ease;
     }
 
     .btn:hover {
-      background-color: #2ea043;
-      transform: translateY(-2px);
+      transform: translateY(-2deg);
+      box-shadow: 0 7px 0px #1e222d;
     }
 
-    /* Panel Inferior de Controles */
-    #ui-container {
-      padding: 15px 20px;
-      background-color: #12151e;
-      border-top: 2px solid #23283b;
+    .btn:active {
+      transform: translateY(4deg);
+      box-shadow: 0 1px 0px #1e222d;
+    }
+
+    .btn-secondary {
+      background-color: #1e90ff;
+    }
+
+    .btn-danger {
+      background-color: #ff4757;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    main {
+      margin-top: 25px;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      font-size: 0.85rem;
-      color: #8b949e;
+      gap: 15px;
     }
 
-    .key {
-      background: #21262d;
-      border: 1px solid #30363d;
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #c9d1d9;
+    .game-card-container {
+      background: #70a1ff;
+      border: 4px solid #2f3542;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 0px #1e222d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #gameCanvas {
+      background-color: #7bed9f;
+      border: 4px solid #2f3542;
+      border-radius: 14px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.15);
+    }
+
+    .controls-hint {
+      color: #eccc68;
+      font-size: 18px;
+      font-weight: 700;
+      text-shadow: 2px 2px 0px #2f3542;
+      margin-top: 10px;
+    }
+
+    /* MODAL DE LOGIN / REGISTRO */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-box {
+      background-color: #ffa502;
+      border: 5px solid #2f3542;
+      border-radius: 24px;
+      padding: 30px;
+      width: 340px;
+      box-shadow: 0 10px 0px #1e222d;
+      position: relative;
+      animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.7); }
+      100% { transform: scale(1); }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: #ff4757;
+      color: white;
+      border: 3px solid #2f3542;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px 0px #1e222d;
+    }
+
+    /* PESTAÑAS EN EL MODAL */
+    .tab-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px;
+      background: #eccc68;
+      border: 3px solid #2f3542;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #2f3542;
+    }
+
+    .tab-btn.active {
+      background: #1e90ff;
+      color: white;
+      box-shadow: 0 4px 0px #1e222d;
+    }
+
+    /* FORMULARIOS */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-field {
+      padding: 12px;
+      border: 3px solid #2f3542;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: inset 0 3px 0px rgba(0,0,0,0.1);
+    }
+
+    .form-btn {
+      width: 100%;
+      margin-top: 10px;
+      background-color: #2ed573;
+    }
+
+    .user-tag {
+      background: #2f3542;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #ffa502;
+      border: 2px solid #ffa502;
     }
   </style>
 </head>
 <body>
 
-  <div id="game-container">
-    <div id="viewport-wrapper">
-      <canvas id="viewport" width="640" height="360"></canvas>
-      
-      <!-- Crosshair -->
-      <div id="crosshair"></div>
-
-      <!-- HUD Top -->
-      <div id="hud-top">
-        <div class="badge">DETECTIVE CARL</div>
-        <div id="stats">
-          <div class="stat-box">SALUD: <span id="hp">100</span>%</div>
-          <div class="stat-box">BAJAS: <span id="score">0</span></div>
-        </div>
-      </div>
-
-      <!-- Overlay Inicio -->
-      <div id="start-overlay" class="overlay">
-        <h1>INFILTRACIÓN EN EL BAR</h1>
-        <p>Los sospechosos han tomado la zona. Elimina a los enemigos antes de que te rodeen. Haz clic para apuntar y disparar.</p>
-        <button class="btn" onclick="iniciarJuego()">COMENZAR MISIÓN</button>
-      </div>
-
-      <!-- Overlay Game Over -->
-      <div id="gameover-overlay" class="overlay" style="display: none;">
-        <h1 id="gameover-title">CARL HA CAÍDO</h1>
-        <p id="gameover-desc">Has sido eliminado por los sospechosos.</p>
-        <button class="btn" onclick="reiniciarJuego()">REINTENTAR</button>
-      </div>
+  <!-- ENCABEZADO / NAVBAR -->
+  <header>
+    <div class="logo">Playoo! 🎮</div>
+    <div class="user-info" id="authSection">
+      <button class="btn btn-secondary" onclick="openAuthModal('login')">Ingresar</button>
+      <button class="btn" onclick="openAuthModal('register')">Registrarse</button>
     </div>
+  </header>
 
-    <!-- Instrucciones -->
-    <div id="ui-container">
-      <div><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> Moverse</div>
-      <div><span class="key">CLICK IZQ</span> DisparAR Pistola</div>
-      <div><span class="key">MOUSE</span> Rotar Cámara</div>
+  <!-- CONTENIDO Y CANVAS -->
+  <main>
+    <div class="game-card-container">
+      <canvas id="gameCanvas" width="800" height="450"></canvas>
+    </div>
+    <p class="controls-hint">🎮 Usa WASD o las Flechas para mover tu avatar</p>
+  </main>
+
+  <!-- VENTANA EMERGENTE (LOGIN Y REGISTRO) -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-box">
+      <button class="close-btn" onclick="closeAuthModal()">X</button>
+      
+      <div class="tab-container">
+        <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
+        <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Registro</button>
+      </div>
+
+      <!-- FORMULARIO DE LOGIN -->
+      <form id="loginForm" class="form-group" onsubmit="handleAuth(event, 'login')">
+        <input type="text" id="loginUser" class="input-field" placeholder="Usuario / Avatar" required>
+        <input type="password" class="input-field" placeholder="Contraseña" required>
+        <button type="submit" class="btn form-btn">¡A Jugar!</button>
+      </form>
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <form id="registerForm" class="form-group" style="display: none;" onsubmit="handleAuth(event, 'register')">
+        <input type="text" id="registerUser" class="input-field" placeholder="Nombre de Avatar" required>
+        <input type="email" class="input-field" placeholder="Correo Electrónico" required>
+        <input type="password" class="input-field" placeholder="Crea una Contraseña" required>
+        <button type="submit" class="btn form-btn" style="background-color: #1e90ff;">Crear Cuenta</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const canvas = document.getElementById("viewport");
-    const ctx = canvas.getContext("2d");
+    // SISTEMA DE AUTENTICACIÓN Y MODAL
+    const modal = document.getElementById('authModal');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegister = document.getElementById('tabRegister');
+    const authSection = document.getElementById('authSection');
 
-    // Estado del juego
-    let jugando = false;
-    let salud = 100;
-    let bajas = 0;
-    let ultimoDisparo = 0;
-    let disparando = false;
+    let currentUser = null;
 
-    // Configuración del jugador (Carl)
-    const jugador = {
-      x: 2.5,
-      y: 2.5,
-      dirX: -1,
-      dirY: 0,
-      planoX: 0,
-      planoY: 0.66,
-      rotSpeed: 0.003
+    function openAuthModal(mode) {
+      modal.style.display = 'flex';
+      switchTab(mode);
+    }
+
+    function closeAuthModal() {
+      modal.style.display = 'none';
+    }
+
+    function switchTab(mode) {
+      if (mode === 'login') {
+        loginForm.style.display = 'flex';
+        registerForm.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'flex';
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+      }
+    }
+
+    function handleAuth(event, type) {
+      event.preventDefault();
+      const username = type === 'login' 
+        ? document.getElementById('loginUser').value 
+        : document.getElementById('registerUser').value;
+
+      currentUser = username;
+      updateUserNavbar();
+      closeAuthModal();
+    }
+
+    function logout() {
+      currentUser = null;
+      authSection.innerHTML = `
+        <button class="btn btn-secondary" onclick="openAuthModal('login')">Ingresar</button>
+        <button class="btn" onclick="openAuthModal('register')">Registrarse</button>
+      `;
+    }
+
+    function updateUserNavbar() {
+      authSection.innerHTML = `
+        <span class="user-tag">👤 ${currentUser}</span>
+        <button class="btn btn-danger" onclick="logout()">Salir</button>
+      `;
+    }
+
+    // MOTOR DE JUEGO 2D EN CANVAS
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const player = {
+      x: 400,
+      y: 225,
+      radius: 20,
+      color: '#ff4757',
+      speed: 5
     };
 
-    // Mapa 2D del Bar (1 = Pared, 0 = Espacio Libre)
-    const mapa = [
-      [1,1,1,1,1,1,1,1,1,1],
-      [1,0,0,0,0,1,0,0,0,1],
-      [1,0,1,1,0,1,0,1,0,1],
-      [1,0,1,0,0,0,0,1,0,1],
-      [1,0,1,0,1,1,0,1,0,1],
-      [1,0,0,0,0,1,0,0,0,1],
-      [1,1,1,0,1,1,1,1,0,1],
-      [1,0,0,0,0,0,0,0,0,1],
-      [1,1,1,1,1,1,1,1,1,1]
-    ];
-    const mapW = 10, mapH = 9;
+    const keys = {};
 
-    // Lista de Enemigos
-    let enemigos = [];
+    window.addEventListener('keydown', (e) => keys[e.key.toLowerCase()] = true);
+    window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
 
-    function crearEnemigo() {
-      const posicionesLibres = [
-        {x: 7.5, y: 1.5},
-        {x: 8.5, y: 5.5},
-        {x: 1.5, y: 7.5},
-        {x: 7.5, y: 7.5}
-      ];
-      const pos = posicionesLibres[Math.floor(Math.random() * posicionesLibres.length)];
-      return {
-        x: pos.x,
-        y: pos.y,
-        salud: 100,
-        alerta: true,
-        ultimoAtaque: 0
-      };
+    function update() {
+      if (keys['arrowup'] || keys['w']) player.y -= player.speed;
+      if (keys['arrowdown'] || keys['s']) player.y += player.speed;
+      if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
+      if (keys['arrowright'] || keys['d']) player.x += player.speed;
+
+      // Límites de la pantalla
+      player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
+      player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
     }
 
-    // Teclas
-    const teclas = {};
-    window.addEventListener("keydown", e => teclas[e.key.toLowerCase()] = true);
-    window.addEventListener("keyup", e => teclas[e.key.toLowerCase()] = false);
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Controles de puntería con ratón
-    const viewportWrapper = document.getElementById("viewport-wrapper");
-    viewportWrapper.addEventListener("mousemove", e => {
-      if (!jugando) return;
-      const movementX = e.movementX || 0;
-      if (movementX !== 0) {
-        rotarJugador(-movementX * jugador.rotSpeed);
+      // Dibujar Cuadrícula de fondo
+      ctx.strokeStyle = '#6ab04c';
+      ctx.lineWidth = 2;
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
       }
-    });
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
 
-    viewportWrapper.addEventListener("mousedown", e => {
-      if (!jugando) return;
-      if (e.button === 0) disparar();
-    });
+      // Dibujar Avatar Caricaturesco
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+      ctx.fillStyle = player.color;
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#2f3542';
+      ctx.stroke();
 
-    function rotarJugador(angulo) {
-      const oldDirX = jugador.dirX;
-      jugador.dirX = jugador.dirX * Math.cos(angulo) - jugador.dirY * Math.sin(angulo);
-      jugador.dirY = oldDirX * Math.sin(angulo) + jugador.dirY * Math.cos(angulo);
-      const oldPlanoX = jugador.planoX;
-      jugador.planoX = jugador.planoX * Math.cos(angulo) - jugador.planoY * Math.sin(angulo);
-      jugador.planoY = oldPlanoX * Math.sin(angulo) + jugador.planoY * Math.cos(angulo);
-    }
+      // Ojos del personaje
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(player.x - 6, player.y - 4, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(player.x + 6, player.y - 4, 5, 0, Math.PI * 2); ctx.fill();
 
-    function disparar() {
-      const ahora = Date.now();
-      if (ahora - ultimoDisparo < 250) return; // Cadencia de tiro
-      ultimoDisparo = ahora;
-      disparando = true;
+      // Pupilas
+      ctx.fillStyle = '#2f3542';
+      ctx.beginPath(); ctx.arc(player.x - 5, player.y - 4, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(player.x + 7, player.y - 4, 2, 0, Math.PI * 2); ctx.fill();
 
-      setTimeout(() => disparando = false, 100);
-
-      // Comprobar impacto en enemigos (Raycast central)
-      enemigos.forEach((e) => {
-        const dx = e.x - jugador.x;
-        const dy = e.y - jugador.y;
-        
-        // Calcular ángulo relativo al jugador
-        const angleToEnemy = Math.atan2(dy, dx);
-        const playerAngle = Math.atan2(jugador.dirY, jugador.dirX);
-        let diffAngle = angleToEnemy - playerAngle;
-
-        while (diffAngle < -Math.PI) diffAngle += Math.PI * 2;
-        while (diffAngle > Math.PI) diffAngle -= Math.PI * 2;
-
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        // Si está cerca del centro de la mirilla
-        if (Math.abs(diffAngle) < 0.25 && dist < 7) {
-          e.salud -= 50;
-          if (e.salud <= 0) {
-            bajas++;
-            document.getElementById("score").innerText = bajas;
-          }
-        }
-      });
-
-      // Limpiar enemigos muertos y reponer
-      enemigos = enemigos.filter(e => e.salud > 0);
-      if (enemigos.length < 3) {
-        enemigos.push(crearEnemigo());
+      // Etiqueta con el nombre del jugador arriba del avatar
+      if (currentUser) {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px Fredoka';
+        ctx.textAlign = 'center';
+        ctx.fillText(currentUser, player.x, player.y - 28);
       }
     }
 
-    function actualizar() {
-      if (!jugando) return;
-
-      const moveSpeed = 0.04;
-
-      // Movimiento W, A, S, D
-      if (teclas["w"]) {
-        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x + jugador.dirX * moveSpeed)] === 0) jugador.x += jugador.dirX * moveSpeed;
-        if (mapa[Math.floor(jugador.y + jugador.dirY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y += jugador.dirY * moveSpeed;
-      }
-      if (teclas["s"]) {
-        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x - jugador.dirX * moveSpeed)] === 0) jugador.x -= jugador.dirX * moveSpeed;
-        if (mapa[Math.floor(jugador.y - jugador.dirY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y -= jugador.dirY * moveSpeed;
-      }
-      if (teclas["a"]) {
-        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x - jugador.planoX * moveSpeed)] === 0) jugador.x -= jugador.planoX * moveSpeed;
-        if (mapa[Math.floor(jugador.y - jugador.planoY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y -= jugador.planoY * moveSpeed;
-      }
-      if (teclas["d"]) {
-        if (mapa[Math.floor(jugador.y)][Math.floor(jugador.x + jugador.planoX * moveSpeed)] === 0) jugador.x += jugador.planoX * moveSpeed;
-        if (mapa[Math.floor(jugador.y + jugador.planoY * moveSpeed)][Math.floor(jugador.x)] === 0) jugador.y += jugador.planoY * moveSpeed;
-      }
-
-      // IA Enemigos
-      const ahora = Date.now();
-      enemigos.forEach(e => {
-        const dx = jugador.x - e.x;
-        const dy = jugador.y - e.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        // Mover hacia Carl
-        if (dist > 0.8) {
-          e.x += (dx / dist) * 0.015;
-          e.y += (dy / dist) * 0.015;
-        } else {
-          // Atacar a Carl
-          if (ahora - e.ultimoAtaque > 800) {
-            salud -= 15;
-            e.ultimoAtaque = ahora;
-            document.getElementById("hp").innerText = Math.max(0, salud);
-
-            if (salud <= 0) {
-              finalizarJuego();
-            }
-          }
-        }
-      });
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
     }
 
-    // Renderizador 3D Raycasting
-    function renderizar() {
-      const w = canvas.width;
-      const h = canvas.height;
-
-      // Techo y Suelo
-      ctx.fillStyle = "#10141d";
-      ctx.fillRect(0, 0, w, h / 2);
-      ctx.fillStyle = "#08090c";
-      ctx.fillRect(0, h / 2, w, h / 2);
-
-      // Renderizar Paredes
-      const zBuffer = new Array(w);
-
-      for (let x = 0; x < w; x++) {
-        const cameraX = 2 * x / w - 1;
-        const rayDirX = jugador.dirX + jugador.planoX * cameraX;
-        const rayDirY = jugador.dirY + jugador.planoY * cameraX;
-
-        let mapX = Math.floor(jugador.x);
-        let mapY = Math.floor(jugador.y);
-
-        let sideDistX, sideDistY;
-
-        const deltaDistX = Math.abs(1 / rayDirX);
-        const deltaDistY = Math.abs(1 / rayDirY);
-        let perpWallDist;
-
-        let stepX, stepY;
-        let hit = 0;
-        let side = 0;
-
-        if (rayDirX < 0) { stepX = -1; sideDistX = (jugador.x - mapX) * deltaDistX; }
-        else { stepX = 1; sideDistX = (mapX + 1.0 - jugador.x) * deltaDistX; }
-
-        if (rayDirY < 0) { stepY = -1; sideDistY = (jugador.y - mapY) * deltaDistY; }
-        else { stepY = 1; sideDistY = (mapY + 1.0 - jugador.y) * deltaDistY; }
-
-        while (hit === 0) {
-          if (sideDistX < sideDistY) {
-            sideDistX += deltaDistX;
-            mapX += stepX;
-            side = 0;
-          } else {
-            sideDistY += deltaDistY;
-            mapY += stepY;
-            side = 1;
-          }
-          if (mapa[mapY][mapX] > 0) hit = 1;
-        }
-
-        if (side === 0) perpWallDist = (mapX - jugador.x + (1 - stepX) / 2) / rayDirX;
-        else perpWallDist = (mapY - jugador.y + (1 - stepY) / 2) / rayDirY;
-
-        zBuffer[x] = perpWallDist;
-
-        const lineHeight = Math.floor(h / perpWallDist);
-        let drawStart = -lineHeight / 2 + h / 2;
-        if (drawStart < 0) drawStart = 0;
-        let drawEnd = lineHeight / 2 + h / 2;
-        if (drawEnd >= h) drawEnd = h - 1;
-
-        // Color de pared con sombra según distancia
-        let baseColor = side === 1 ? 40 : 65;
-        let shade = Math.max(0, Math.min(255, baseColor - perpWallDist * 6));
-        ctx.fillStyle = `rgb(${shade}, ${shade + 10}, ${shade + 25})`;
-        ctx.fillRect(x, drawStart, 1, drawEnd - drawStart);
-      }
-
-      // Renderizar Enemigos (Sprites)
-      enemigos.sort((a, b) => {
-        const distA = Math.pow(jugador.x - a.x, 2) + Math.pow(jugador.y - a.y, 2);
-        const distB = Math.pow(jugador.x - b.x, 2) + Math.pow(jugador.y - b.y, 2);
-        return distB - distA;
-      });
-
-      enemigos.forEach(e => {
-        const spriteX = e.x - jugador.x;
-        const spriteY = e.y - jugador.y;
-
-        const invDet = 1.0 / (jugador.planoX * jugador.dirY - jugador.dirX * jugador.planoY);
-        const transformX = invDet * (jugador.dirY * spriteX - jugador.dirX * spriteY);
-        const transformY = invDet * (-jugador.planoY * spriteX + jugador.planoX * spriteY);
-
-        if (transformY > 0) {
-          const spriteScreenX = Math.floor((w / 2) * (1 + transformX / transformY));
-          const spriteHeight = Math.abs(Math.floor(h / transformY));
-          const drawStartY = Math.max(0, -spriteHeight / 2 + h / 2);
-          const drawEndY = Math.min(h - 1, spriteHeight / 2 + h / 2);
-
-          const spriteWidth = Math.abs(Math.floor(h / transformY));
-          let drawStartX = Math.floor(-spriteWidth / 2 + spriteScreenX);
-          let drawEndX = spriteWidth / 2 + spriteScreenX;
-
-          for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
-            if (stripe > 0 && stripe < w && transformY < zBuffer[stripe]) {
-              // Dibuja silueta enemiga
-              ctx.fillStyle = "#d93838";
-              ctx.fillRect(stripe, drawStartY + spriteHeight * 0.2, 1, (drawEndY - drawStartY) * 0.7);
-              // Cabeza
-              ctx.fillStyle = "#f85149";
-              ctx.fillRect(stripe, drawStartY, 1, spriteHeight * 0.2);
-            }
-          }
-        }
-      });
-
-      // Dibujar Pistola de Carl
-      dibujarPistola(w, h);
-    }
-
-    function dibujarPistola(w, h) {
-      ctx.save();
-      const gunX = w / 2 + 60;
-      const gunY = h - (disparando ? 110 : 130);
-
-      // Destello de disparo
-      if (disparando) {
-        ctx.fillStyle = "#ffcc00";
-        ctx.beginPath();
-        ctx.arc(gunX - 25, gunY - 30, 25, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Cañón
-      ctx.fillStyle = "#21262d";
-      ctx.fillRect(gunX - 35, gunY - 20, 20, 50);
-      // Cuerpo
-      ctx.fillStyle = "#30363d";
-      ctx.fillRect(gunX - 40, gunY, 30, 70);
-      // Empuñadura
-      ctx.fillStyle = "#161b22";
-      ctx.fillRect(gunX - 30, gunY + 40, 25, 60);
-
-      ctx.restore();
-    }
-
-    function bucleJuego() {
-      actualizar();
-      renderizar();
-      if (jugando) requestAnimationFrame(bucleJuego);
-    }
-
-    function iniciarJuego() {
-      document.getElementById("start-overlay").style.display = "none";
-      document.getElementById("gameover-overlay").style.display = "none";
-      salud = 100;
-      bajas = 0;
-      document.getElementById("hp").innerText = salud;
-      document.getElementById("score").innerText = bajas;
-      enemigos = [crearEnemigo(), crearEnemigo()];
-      jugando = true;
-
-      // Solicitar Pointer Lock opcional para mejor experiencia
-      viewportWrapper.requestPointerLock = viewportWrapper.requestPointerLock || viewportWrapper.mozRequestPointerLock;
-      if (viewportWrapper.requestPointerLock) {
-        viewportWrapper.requestPointerLock();
-      }
-
-      requestAnimationFrame(bucleJuego);
-    }
-
-    function finalizarJuego() {
-      jugando = false;
-      document.getElementById("gameover-overlay").style.display = "flex";
-      document.getElementById("gameover-title").innerText = "CARL HA CAÍDO";
-      document.getElementById("gameover-desc").innerText = `Lograste neutralizar a ${bajas} sospechosos antes de ser abatido.`;
-      if (document.exitPointerLock) document.exitPointerLock();
-    }
-
-    function reiniciarJuego() {
-      iniciarJuego();
-    }
+    gameLoop();
   </script>
 </body>
 </html>
