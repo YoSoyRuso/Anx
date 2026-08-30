@@ -24,6 +24,126 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* PANTALLA INICIAL DE AUTENTICACIÓN (PANTALLA COMPLETA) */
+    #authScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #2f3542;
+      background-image: radial-gradient(#3a4052 2px, transparent 2px);
+      background-size: 24px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .auth-brand {
+      font-size: 56px;
+      font-weight: 700;
+      color: #ffa502;
+      text-shadow: 4px 4px 0px #1e222d, -3px -3px 0px #1e222d, 3px -3px 0px #1e222d, -3px 3px 0px #1e222d;
+      letter-spacing: 3px;
+      transform: rotate(-3deg);
+      margin-bottom: 25px;
+    }
+
+    .auth-card {
+      background-color: #ffa502;
+      border: 5px solid #2f3542;
+      border-radius: 24px;
+      padding: 30px;
+      width: 360px;
+      box-shadow: 0 10px 0px #1e222d;
+    }
+
+    /* PESTAÑAS EN LA PANTALLA DE AUTH */
+    .tab-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: #eccc68;
+      border: 3px solid #2f3542;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      color: #2f3542;
+      transition: background 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #1e90ff;
+      color: white;
+      box-shadow: 0 4px 0px #1e222d;
+    }
+
+    /* FORMULARIOS */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-field {
+      padding: 12px;
+      border: 3px solid #2f3542;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: inset 0 3px 0px rgba(0,0,0,0.1);
+    }
+
+    /* BOTONES CARICATURAS (Efecto Click 3D) */
+    .btn {
+      background-color: #2ed573;
+      color: #ffffff;
+      border: 3px solid #2f3542;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 5px 0px #1e222d;
+      transition: all 0.1s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2deg);
+      box-shadow: 0 7px 0px #1e222d;
+    }
+
+    .btn:active {
+      transform: translateY(4deg);
+      box-shadow: 0 1px 0px #1e222d;
+    }
+
+    .btn-danger {
+      background-color: #ff4757;
+    }
+
+    .form-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* ESTRUCTURA DEL JUEGO / INICIO (Oculto por defecto) */
+    #appContent {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
     }
 
     /* BARRA DE NAVEGACIÓN ESTILO CARTOON */
@@ -53,39 +173,16 @@
       gap: 12px;
     }
 
-    /* BOTONES CARICATURAS (Efecto Click 3D) */
-    .btn {
-      background-color: #2ed573;
-      color: #ffffff;
-      border: 3px solid #2f3542;
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 5px 0px #1e222d;
-      transition: all 0.1s ease;
+    .user-tag {
+      background: #2f3542;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #ffa502;
+      border: 2px solid #ffa502;
     }
 
-    .btn:hover {
-      transform: translateY(-2deg);
-      box-shadow: 0 7px 0px #1e222d;
-    }
-
-    .btn:active {
-      transform: translateY(4deg);
-      box-shadow: 0 1px 0px #1e222d;
-    }
-
-    .btn-secondary {
-      background-color: #1e90ff;
-    }
-
-    .btn-danger {
-      background-color: #ff4757;
-    }
-
-    /* CONTENEDOR PRINCIPAL */
+    /* CONTENEDOR PRINCIPAL DEL JUEGO */
     main {
       margin-top: 25px;
       display: flex;
@@ -119,132 +216,14 @@
       text-shadow: 2px 2px 0px #2f3542;
       margin-top: 10px;
     }
-
-    /* MODAL DE LOGIN / REGISTRO */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-    }
-
-    .modal-box {
-      background-color: #ffa502;
-      border: 5px solid #2f3542;
-      border-radius: 24px;
-      padding: 30px;
-      width: 340px;
-      box-shadow: 0 10px 0px #1e222d;
-      position: relative;
-      animation: popIn 0.2s ease-out;
-    }
-
-    @keyframes popIn {
-      0% { transform: scale(0.7); }
-      100% { transform: scale(1); }
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      background: #ff4757;
-      color: white;
-      border: 3px solid #2f3542;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 3px 0px #1e222d;
-    }
-
-    /* PESTAÑAS EN EL MODAL */
-    .tab-container {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 8px;
-      background: #eccc68;
-      border: 3px solid #2f3542;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #2f3542;
-    }
-
-    .tab-btn.active {
-      background: #1e90ff;
-      color: white;
-      box-shadow: 0 4px 0px #1e222d;
-    }
-
-    /* FORMULARIOS */
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .input-field {
-      padding: 12px;
-      border: 3px solid #2f3542;
-      border-radius: 12px;
-      font-size: 16px;
-      outline: none;
-      box-shadow: inset 0 3px 0px rgba(0,0,0,0.1);
-    }
-
-    .form-btn {
-      width: 100%;
-      margin-top: 10px;
-      background-color: #2ed573;
-    }
-
-    .user-tag {
-      background: #2f3542;
-      padding: 6px 14px;
-      border-radius: 10px;
-      font-size: 18px;
-      color: #ffa502;
-      border: 2px solid #ffa502;
-    }
   </style>
 </head>
 <body>
 
-  <!-- ENCABEZADO / NAVBAR -->
-  <header>
-    <div class="logo">Playoo! 🎮</div>
-    <div class="user-info" id="authSection">
-      <button class="btn btn-secondary" onclick="openAuthModal('login')">Ingresar</button>
-      <button class="btn" onclick="openAuthModal('register')">Registrarse</button>
-    </div>
-  </header>
-
-  <!-- CONTENIDO Y CANVAS -->
-  <main>
-    <div class="game-card-container">
-      <canvas id="gameCanvas" width="800" height="450"></canvas>
-    </div>
-    <p class="controls-hint">🎮 Usa WASD o las Flechas para mover tu avatar</p>
-  </main>
-
-  <!-- VENTANA EMERGENTE (LOGIN Y REGISTRO) -->
-  <div class="modal-overlay" id="authModal">
-    <div class="modal-box">
-      <button class="close-btn" onclick="closeAuthModal()">X</button>
-      
+  <!-- PANTALLA PRINCIPAL DE LOGIN Y REGISTRO -->
+  <div id="authScreen">
+    <div class="auth-brand">Playoo! 🎮</div>
+    <div class="auth-card">
       <div class="tab-container">
         <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
         <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Registro</button>
@@ -267,25 +246,35 @@
     </div>
   </div>
 
+  <!-- CONTENIDO PRINCIPAL (SE MUESTRA TRAS AUTENTICARSE) -->
+  <div id="appContent">
+    <header>
+      <div class="logo">Playoo! 🎮</div>
+      <div class="user-info">
+        <span class="user-tag" id="displayUsername">👤 Avatar</span>
+        <button class="btn btn-danger" onclick="logout()">Salir</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="game-card-container">
+        <canvas id="gameCanvas" width="800" height="450"></canvas>
+      </div>
+      <p class="controls-hint">🎮 Usa WASD o las Flechas para mover tu avatar</p>
+    </main>
+  </div>
+
   <script>
-    // SISTEMA DE AUTENTICACIÓN Y MODAL
-    const modal = document.getElementById('authModal');
+    // CONTROL DE PANTALLAS Y AUTENTICACIÓN
+    const authScreen = document.getElementById('authScreen');
+    const appContent = document.getElementById('appContent');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const tabLogin = document.getElementById('tabLogin');
     const tabRegister = document.getElementById('tabRegister');
-    const authSection = document.getElementById('authSection');
+    const displayUsername = document.getElementById('displayUsername');
 
     let currentUser = null;
-
-    function openAuthModal(mode) {
-      modal.style.display = 'flex';
-      switchTab(mode);
-    }
-
-    function closeAuthModal() {
-      modal.style.display = 'none';
-    }
 
     function switchTab(mode) {
       if (mode === 'login') {
@@ -308,23 +297,18 @@
         : document.getElementById('registerUser').value;
 
       currentUser = username;
-      updateUserNavbar();
-      closeAuthModal();
+      displayUsername.textContent = `👤 ${currentUser}`;
+      
+      // Ocultar pantalla de login y mostrar el juego
+      authScreen.style.display = 'none';
+      appContent.style.display = 'flex';
     }
 
     function logout() {
       currentUser = null;
-      authSection.innerHTML = `
-        <button class="btn btn-secondary" onclick="openAuthModal('login')">Ingresar</button>
-        <button class="btn" onclick="openAuthModal('register')">Registrarse</button>
-      `;
-    }
-
-    function updateUserNavbar() {
-      authSection.innerHTML = `
-        <span class="user-tag">👤 ${currentUser}</span>
-        <button class="btn btn-danger" onclick="logout()">Salir</button>
-      `;
+      // Ocultar el juego y volver a mostrar la pantalla de login
+      appContent.style.display = 'none';
+      authScreen.style.display = 'flex';
     }
 
     // MOTOR DE JUEGO 2D EN CANVAS
@@ -345,14 +329,16 @@
     window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
 
     function update() {
-      if (keys['arrowup'] || keys['w']) player.y -= player.speed;
-      if (keys['arrowdown'] || keys['s']) player.y += player.speed;
-      if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
-      if (keys['arrowright'] || keys['d']) player.x += player.speed;
+      if (currentUser) {
+        if (keys['arrowup'] || keys['w']) player.y -= player.speed;
+        if (keys['arrowdown'] || keys['s']) player.y += player.speed;
+        if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
+        if (keys['arrowright'] || keys['d']) player.x += player.speed;
 
-      // Límites de la pantalla
-      player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
-      player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
+        // Límites de la pantalla
+        player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
+        player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
+      }
     }
 
     function draw() {
