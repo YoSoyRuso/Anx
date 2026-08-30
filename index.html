@@ -27,7 +27,7 @@
       overflow-x: hidden;
     }
 
-    /* PANTALLA INICIAL DE AUTENTICACIÓN (PANTALLA COMPLETA) */
+    /* PANTALLA INICIAL DE AUTENTICACIÓN */
     #authScreen {
       position: fixed;
       top: 0;
@@ -63,7 +63,6 @@
       box-shadow: 0 10px 0px #1e222d;
     }
 
-    /* PESTAÑAS EN LA PANTALLA DE AUTH */
     .tab-container {
       display: flex;
       gap: 10px;
@@ -89,7 +88,6 @@
       box-shadow: 0 4px 0px #1e222d;
     }
 
-    /* FORMULARIOS */
     .form-group {
       display: flex;
       flex-direction: column;
@@ -105,7 +103,6 @@
       box-shadow: inset 0 3px 0px rgba(0,0,0,0.1);
     }
 
-    /* BOTONES CARICATURAS (Efecto Click 3D) */
     .btn {
       background-color: #2ed573;
       color: #ffffff;
@@ -138,7 +135,18 @@
       margin-top: 10px;
     }
 
-    /* ESTRUCTURA DEL JUEGO / INICIO (Oculto por defecto) */
+    /* MENSAJE DE ERROR O ALERTA */
+    .error-msg {
+      color: #ff4757;
+      background-color: #2f3542;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
     #appContent {
       display: none;
       width: 100%;
@@ -146,7 +154,6 @@
       align-items: center;
     }
 
-    /* BARRA DE NAVEGACIÓN ESTILO CARTOON */
     header {
       width: 100%;
       background-color: #ff4757;
@@ -182,7 +189,6 @@
       border: 2px solid #ffa502;
     }
 
-    /* CONTENEDOR PRINCIPAL DEL JUEGO */
     main {
       margin-top: 25px;
       display: flex;
@@ -229,24 +235,26 @@
         <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Registro</button>
       </div>
 
+      <div id="authAlert" class="error-msg"></div>
+
       <!-- FORMULARIO DE LOGIN -->
       <form id="loginForm" class="form-group" onsubmit="handleAuth(event, 'login')">
         <input type="text" id="loginUser" class="input-field" placeholder="Usuario / Avatar" required>
-        <input type="password" class="input-field" placeholder="Contraseña" required>
+        <input type="password" id="loginPass" class="input-field" placeholder="Contraseña" required>
         <button type="submit" class="btn form-btn">¡A Jugar!</button>
       </form>
 
       <!-- FORMULARIO DE REGISTRO -->
       <form id="registerForm" class="form-group" style="display: none;" onsubmit="handleAuth(event, 'register')">
         <input type="text" id="registerUser" class="input-field" placeholder="Nombre de Avatar" required>
-        <input type="email" class="input-field" placeholder="Correo Electrónico" required>
-        <input type="password" class="input-field" placeholder="Crea una Contraseña" required>
+        <input type="email" id="registerEmail" class="input-field" placeholder="Correo Electrónico" required>
+        <input type="password" id="registerPass" class="input-field" placeholder="Crea una Contraseña" required>
         <button type="submit" class="btn form-btn" style="background-color: #1e90ff;">Crear Cuenta</button>
       </form>
     </div>
   </div>
 
-  <!-- CONTENIDO PRINCIPAL (SE MUESTRA TRAS AUTENTICARSE) -->
+  <!-- CONTENIDO PRINCIPAL -->
   <div id="appContent">
     <header>
       <div class="logo">Playoo! 🎮</div>
@@ -265,7 +273,6 @@
   </div>
 
   <script>
-    // CONTROL DE PANTALLAS Y AUTENTICACIÓN
     const authScreen = document.getElementById('authScreen');
     const appContent = document.getElementById('appContent');
     const loginForm = document.getElementById('loginForm');
@@ -273,10 +280,30 @@
     const tabLogin = document.getElementById('tabLogin');
     const tabRegister = document.getElementById('tabRegister');
     const displayUsername = document.getElementById('displayUsername');
+    const authAlert = document.getElementById('authAlert');
 
     let currentUser = null;
 
+    // Obtener usuarios almacenados
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('playoo_users') || '{}');
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('playoo_users', JSON.stringify(users));
+    }
+
+    function showAlert(msg) {
+      authAlert.textContent = msg;
+      authAlert.style.display = 'block';
+    }
+
+    function hideAlert() {
+      authAlert.style.display = 'none';
+    }
+
     function switchTab(mode) {
+      hideAlert();
       if (mode === 'login') {
         loginForm.style.display = 'flex';
         registerForm.style.display = 'none';
@@ -292,23 +319,69 @@
 
     function handleAuth(event, type) {
       event.preventDefault();
-      const username = type === 'login' 
-        ? document.getElementById('loginUser').value 
-        : document.getElementById('registerUser').value;
+      hideAlert();
 
-      currentUser = username;
+      const users = getUsers();
+
+      if (type === 'register') {
+        const username = document.getElementById('registerUser').value.trim();
+        const password = document.getElementById('registerPass').value;
+
+        // Comprobar si ya existe
+        if (users[username.toLowerCase()]) {
+          showAlert("⚠️ Esta cuenta ya está registrada. Por favor, inicia sesión.");
+          switchTab('login');
+          document.getElementById('loginUser').value = username;
+          return;
+        }
+
+        // Guardar nuevo usuario
+        users[username.toLowerCase()] = { username, password };
+        saveUsers(users);
+
+        currentUser = username;
+        enterGame();
+
+      } else if (type === 'login') {
+        const usernameInput = document.getElementById('loginUser').value.trim();
+        const passwordInput = document.getElementById('loginPass').value;
+
+        const userAccount = users[usernameInput.toLowerCase()];
+
+        if (!userAccount) {
+          showAlert("❌ El usuario no existe. Regístrate primero.");
+          return;
+        }
+
+        if (userAccount.password !== passwordInput) {
+          showAlert("🔒 Contraseña incorrecta.");
+          return;
+        }
+
+        currentUser = userAccount.username;
+        enterGame();
+      }
+    }
+
+    function enterGame() {
       displayUsername.textContent = `👤 ${currentUser}`;
-      
-      // Ocultar pantalla de login y mostrar el juego
       authScreen.style.display = 'none';
       appContent.style.display = 'flex';
+      
+      // Reiniciar posición del personaje
+      player.x = 400;
+      player.y = 225;
     }
 
     function logout() {
       currentUser = null;
-      // Ocultar el juego y volver a mostrar la pantalla de login
       appContent.style.display = 'none';
       authScreen.style.display = 'flex';
+      
+      // Resetear campos y volver a pestaña Login
+      document.getElementById('loginForm').reset();
+      document.getElementById('registerForm').reset();
+      switchTab('login');
     }
 
     // MOTOR DE JUEGO 2D EN CANVAS
@@ -318,9 +391,7 @@
     const player = {
       x: 400,
       y: 225,
-      radius: 20,
-      color: '#ff4757',
-      speed: 5
+      speed: 4
     };
 
     const keys = {};
@@ -335,16 +406,63 @@
         if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
         if (keys['arrowright'] || keys['d']) player.x += player.speed;
 
-        // Límites de la pantalla
-        player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
-        player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
+        // Límites del canvas
+        player.x = Math.max(25, Math.min(canvas.width - 25, player.x));
+        player.y = Math.max(40, Math.min(canvas.height - 20, player.y));
       }
+    }
+
+    function drawHumanoidAvatar(x, y) {
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#2f3542';
+      ctx.fillStyle = '#ffffff';
+
+      // 1. Piernas
+      ctx.beginPath();
+      ctx.lineCap = 'round';
+      ctx.moveTo(x - 8, y + 15);
+      ctx.lineTo(x - 10, y + 32);
+      ctx.moveTo(x + 8, y + 15);
+      ctx.lineTo(x + 10, y + 32);
+      ctx.stroke();
+
+      // 2. Brazos
+      ctx.beginPath();
+      ctx.moveTo(x - 12, y - 2);
+      ctx.lineTo(x - 20, y + 12);
+      ctx.moveTo(x + 12, y - 2);
+      ctx.lineTo(x + 20, y + 12);
+      ctx.stroke();
+
+      // 3. Torso / Cuerpo Humano
+      ctx.beginPath();
+      ctx.roundRect(x - 12, y - 8, 24, 26, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      // 4. Cabeza
+      ctx.beginPath();
+      ctx.arc(x, y - 22, 14, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // 5. Ojos
+      ctx.fillStyle = '#2f3542';
+      ctx.beginPath();
+      ctx.arc(x - 5, y - 24, 2.5, 0, Math.PI * 2);
+      ctx.arc(x + 5, y - 24, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 6. Sonrisa caricaturesca
+      ctx.beginPath();
+      ctx.arc(x, y - 21, 5, 0.2 * Math.PI, 0.8 * Math.PI);
+      ctx.stroke();
     }
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Dibujar Cuadrícula de fondo
+      // Cuadrícula de fondo
       ctx.strokeStyle = '#6ab04c';
       ctx.lineWidth = 2;
       for (let x = 0; x < canvas.width; x += 40) {
@@ -354,31 +472,18 @@
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
       }
 
-      // Dibujar Avatar Caricaturesco
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-      ctx.fillStyle = player.color;
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#2f3542';
-      ctx.stroke();
+      // Dibujar Avatar Humanoide Blanco
+      drawHumanoidAvatar(player.x, player.y);
 
-      // Ojos del personaje
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath(); ctx.arc(player.x - 6, player.y - 4, 5, 0, Math.PI * 2); ctx.fill();
-      ctx.beginPath(); ctx.arc(player.x + 6, player.y - 4, 5, 0, Math.PI * 2); ctx.fill();
-
-      // Pupilas
-      ctx.fillStyle = '#2f3542';
-      ctx.beginPath(); ctx.arc(player.x - 5, player.y - 4, 2, 0, Math.PI * 2); ctx.fill();
-      ctx.beginPath(); ctx.arc(player.x + 7, player.y - 4, 2, 0, Math.PI * 2); ctx.fill();
-
-      // Etiqueta con el nombre del jugador arriba del avatar
+      // Nombre del avatar flotando sobre la cabeza
       if (currentUser) {
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 14px Fredoka';
+        ctx.font = 'bold 15px Fredoka';
         ctx.textAlign = 'center';
-        ctx.fillText(currentUser, player.x, player.y - 28);
+        ctx.shadowColor = '#2f3542';
+        ctx.shadowBlur = 4;
+        ctx.fillText(currentUser, player.x, player.y - 42);
+        ctx.shadowBlur = 0; // Limpiar sombra
       }
     }
 
