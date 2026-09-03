@@ -3,23 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aether Network | Play & Create</title>
+  <title>Aether Network | ¡Juega y Crea!</title>
   
-  <!-- Fuentes de Google -->
+  <!-- Tipografías amigables y redondeadas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Mali:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-color: #0b0d12;
-      --card-bg: rgba(18, 22, 31, 0.75);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --accent-cyan: #00f0ff;
-      --text-main: #f0f4f8;
-      --text-muted: #8a99ad;
-      --font-title: 'Space Grotesk', sans-serif;
-      --font-body: 'Inter', sans-serif;
+      --bg-main: #f0fdf4;
+      --card-bg: #ffffff;
+      --border-color: #2b2d42;
+      --accent-yellow: #ffde59;
+      --accent-orange: #ff914d;
+      --accent-green: #7ed957;
+      --accent-blue: #5271ff;
+      --text-dark: #2b2d42;
+      --text-muted: #6c757d;
+      --font-title: 'Fredoka', cursive, sans-serif;
+      --font-hand: 'Mali', cursive, sans-serif;
     }
 
     * {
@@ -29,323 +32,328 @@
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: var(--font-body);
+      background-color: var(--bg-main);
+      background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      color: var(--text-dark);
+      font-family: var(--font-title);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
       position: relative;
     }
 
-    /* Fondo decorativo */
-    .grid-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: -2;
-    }
-
-    .glow-orb {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, rgba(0,0,0,0) 70%);
-      top: 10%;
-      right: 15%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    /* Header */
+    /* Barra Superior */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 2rem 5%;
+      padding: 1.2rem 6%;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
     }
 
     .logo {
-      font-family: var(--font-title);
+      font-size: 2rem;
       font-weight: 700;
-      font-size: 1.4rem;
-      letter-spacing: 2px;
+      color: var(--accent-blue);
+      text-shadow: 2px 2px 0px var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .logo-icon {
-      color: var(--accent-cyan);
-      margin-right: 5px;
+    .logo-badge {
+      background: var(--accent-yellow);
+      border: 3px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 1.2rem;
+      transform: rotate(-5deg);
     }
 
-    .nav-status {
-      font-size: 0.75rem;
-      font-family: var(--font-title);
-      letter-spacing: 1px;
-      color: var(--text-muted);
+    .status-pill {
+      background: #ffffff;
+      border: 3px solid var(--border-color);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 3px 3px 0px var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .status-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      background-color: var(--accent-cyan);
+    .dot {
+      width: 12px;
+      height: 12px;
+      background: var(--accent-green);
+      border: 2px solid var(--border-color);
       border-radius: 50%;
-      margin-right: 6px;
-      box-shadow: 0 0 8px var(--accent-cyan);
     }
 
-    .status-text {
-      color: var(--text-main);
-    }
-
-    /* Layout Hero */
-    .hero-container {
+    /* Contenedor Principal */
+    .main-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 2rem;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 3rem;
-      padding: 2rem 5%;
-      max-width: 1200px;
-      margin: 0 auto;
-      flex: 1;
+      gap: 2.5rem;
       align-items: center;
     }
 
-    @media (min-width: 900px) {
-      .hero-container {
+    @media (min-width: 850px) {
+      .main-container {
         grid-template-columns: 1fr 420px;
       }
     }
 
-    .hero-text h1 {
-      font-family: var(--font-title);
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      line-height: 1.05;
-      margin: 1rem 0;
-      letter-spacing: -1px;
-    }
-
-    .highlight {
-      color: transparent;
-      -webkit-text-stroke: 1px var(--text-main);
-    }
-
-    .badge {
-      font-family: var(--font-title);
-      font-size: 0.7rem;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 4px 10px;
-      border-radius: 4px;
-      border: 1px solid var(--border-color);
-      letter-spacing: 1px;
-      color: var(--accent-cyan);
-    }
-
-    .hero-text p {
-      color: var(--text-muted);
-      max-width: 480px;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    /* Tarjeta de Login/Registro */
-    .auth-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      backdrop-filter: blur(12px);
-      padding: 2.5rem 2rem;
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    }
-
-    .auth-tabs {
+    /* Seccion Izquierda */
+    .hero-box {
       display: flex;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 2rem;
-    }
-
-    .tab-btn {
-      flex: 1;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.8rem 0;
-      font-family: var(--font-title);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
-    }
-
-    .tab-btn.active {
-      color: var(--text-main);
-    }
-
-    .tab-btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--accent-cyan);
-      box-shadow: 0 0 10px var(--accent-cyan);
-    }
-
-    .auth-form {
-      display: none;
       flex-direction: column;
       gap: 1.2rem;
     }
 
-    .auth-form.active {
-      display: flex;
+    .welcome-tag {
+      align-self: flex-start;
+      background: var(--accent-orange);
+      color: white;
+      border: 3px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      transform: rotate(-2deg);
+      box-shadow: 3px 3px 0px var(--border-color);
     }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
+    .hero-box h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.1;
+      color: var(--text-dark);
     }
 
-    .input-group label {
-      font-family: var(--font-title);
-      font-size: 0.7rem;
-      letter-spacing: 1px;
+    .highlight-green {
+      color: var(--accent-green);
+      text-shadow: 2px 2px 0px var(--border-color);
+    }
+
+    .highlight-yellow {
+      color: var(--accent-yellow);
+      text-shadow: 2px 2px 0px var(--border-color);
+    }
+
+    .hero-box p {
+      font-size: 1.2rem;
       color: var(--text-muted);
+      line-height: 1.5;
     }
 
-    .input-group input {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border-color);
-      padding: 0.8rem 1rem;
-      border-radius: 4px;
-      color: var(--text-main);
-      font-family: var(--font-body);
-      outline: none;
-      transition: border-color 0.2s ease;
+    .floating-doodles {
+      font-family: var(--font-hand);
+      font-size: 1.1rem;
+      color: var(--accent-blue);
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
     }
 
-    .input-group input:focus {
-      border-color: var(--accent-cyan);
+    /* Tarjeta Cartoon de Login/Registro */
+    .auth-card {
+      background: var(--card-bg);
+      border: 4px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 8px 8px 0px var(--border-color);
+      position: relative;
     }
 
-    .btn-primary {
-      margin-top: 1rem;
-      background: var(--text-main);
-      color: var(--bg-color);
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      background: #f1f5f9;
+      padding: 6px;
+      border-radius: 16px;
+      border: 3px solid var(--border-color);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
       border: none;
-      padding: 0.9rem;
-      border-radius: 4px;
+      background: transparent;
       font-family: var(--font-title);
       font-weight: 700;
-      letter-spacing: 1px;
+      font-size: 1.1rem;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: transform 0.1s ease, background-color 0.2s ease;
+      border-radius: 10px;
+      transition: all 0.2s ease;
     }
 
-    .btn-primary:hover {
-      background: var(--accent-cyan);
+    .tab-btn.active {
+      background: var(--accent-yellow);
+      color: var(--text-dark);
+      border: 2px solid var(--border-color);
+      box-shadow: 2px 2px 0px var(--border-color);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .input-box input {
+      border: 3px solid var(--border-color);
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-family: var(--font-title);
+      font-size: 1rem;
+      outline: none;
+      background: #fafafa;
+      transition: transform 0.1s ease;
+    }
+
+    .input-box input:focus {
+      background: #ffffff;
       transform: translateY(-2px);
+      box-shadow: 3px 3px 0px var(--border-color);
+    }
+
+    .btn-submit {
+      margin-top: 0.5rem;
+      background: var(--accent-green);
+      color: var(--text-dark);
+      border: 3px solid var(--border-color);
+      padding: 14px;
+      border-radius: 16px;
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--border-color);
+      transition: all 0.1s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--border-color);
+      background: #8eff66;
+    }
+
+    .btn-submit:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--border-color);
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Fondo dinámico sutil -->
-  <div class="grid-background"></div>
-  <div class="glow-orb"></div>
-
   <!-- Navegación -->
   <header class="navbar">
     <div class="logo">
-      <span class="logo-icon">◈</span> AETHER
+      <span class="logo-badge">🎮</span> AETHER
     </div>
-    <div class="nav-status">
-      <span class="status-dot"></span> SERVIDORES: <span class="status-text">ONLINE</span>
+    <div class="status-pill">
+      <span class="dot"></span> ¡Servidores Listos!
     </div>
   </header>
 
-  <!-- Contenedor Principal -->
-  <main class="hero-container">
-    <section class="hero-text">
-      <span class="badge">SISTEMA v0.1</span>
-      <h1>JUEGA.<br><span class="highlight">CREA.</span> EVOLUCIONA.</h1>
-      <p>La plataforma descentralizada para jugadores y desarrolladores. Accede a tu biblioteca o lanza tu propio universo.</p>
+  <!-- Contenido -->
+  <main class="main-container">
+    
+    <!-- Texto Amigable -->
+    <section class="hero-box">
+      <div class="welcome-tag">¡Hola, creador! 👋</div>
+      <h1>¡JUEGA,<br><span class="highlight-yellow">CREA Y</span> <span class="highlight-green">DIVIÉRTETE!</span></h1>
+      <p>Un espacio donde puedes probar juegos hechos por la comunidad o subir tus propias creaciones en segundos. Sin complicaciones.</p>
+      
+      <div class="floating-doodles">
+        <span>✨ 100% Gratis</span>
+        <span>🚀 Hecho por personas como tú</span>
+      </div>
     </section>
 
-    <!-- Caja de Autenticación -->
+    <!-- Caja Login/Registro Cartoon -->
     <section class="auth-card">
-      <div class="auth-tabs">
-        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Ingresar</button>
-        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Registrarse</button>
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-login" onclick="setTab('login')">Entrar 🔑</button>
+        <button class="tab-btn" id="tab-register" onclick="setTab('register')">Unirme 🎨</button>
       </div>
 
-      <!-- Formulario Login -->
-      <form id="form-login" class="auth-form active">
-        <div class="input-group">
-          <label for="login-email">USUARIO O EMAIL</label>
-          <input type="text" id="login-email" placeholder="dev_player" required autocomplete="off">
+      <!-- Form Login -->
+      <form id="form-login" class="form-group" onsubmit="event.preventDefault(); alert('¡Bienvenido de vuelta!');">
+        <div class="input-box">
+          <label for="login-user">Tu Apodo o Email</label>
+          <input type="text" id="login-user" placeholder="ej. GamerPro99" required autocomplete="off">
         </div>
-        <div class="input-group">
-          <label for="login-pass">CONTRASEÑA</label>
+        <div class="input-box">
+          <label for="login-pass">Tu Contraseña Secretísima</label>
           <input type="password" id="login-pass" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn-primary">INICIAR SESIÓN</button>
+        <button type="submit" class="btn-submit">¡A JUGAR!</button>
       </form>
 
-      <!-- Formulario Registro -->
-      <form id="form-register" class="auth-form">
-        <div class="input-group">
-          <label for="reg-user">NOMBRE DE USUARIO</label>
-          <input type="text" id="reg-user" placeholder="ej. CyberDev" required autocomplete="off">
+      <!-- Form Registro -->
+      <form id="form-register" class="form-group hidden" onsubmit="event.preventDefault(); alert('¡Cuenta creada con éxito!');">
+        <div class="input-box">
+          <label for="reg-user">Elige un Nombre Genial</label>
+          <input type="text" id="reg-user" placeholder="ej. PixelArtisan" required autocomplete="off">
         </div>
-        <div class="input-group">
-          <label for="reg-email">CORREO ELECTRÓNICO</label>
-          <input type="email" id="reg-email" placeholder="usuario@aether.com" required autocomplete="off">
+        <div class="input-box">
+          <label for="reg-email">Tu Correo Electrónico</label>
+          <input type="email" id="reg-email" placeholder="hola@amigo.com" required autocomplete="off">
         </div>
-        <div class="input-group">
-          <label for="reg-pass">CONTRASEÑA</label>
+        <div class="input-box">
+          <label for="reg-pass">Crea una Contraseña</label>
           <input type="password" id="reg-pass" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn-primary">CREAR CUENTA</button>
+        <button type="submit" class="btn-submit">¡CREAR MI CUENTA!</button>
       </form>
     </section>
+
   </main>
 
   <script>
-    function switchTab(tab) {
+    function setTab(type) {
       const loginForm = document.getElementById('form-login');
       const registerForm = document.getElementById('form-register');
-      const loginTab = document.getElementById('tab-login');
-      const registerTab = document.getElementById('tab-register');
+      const loginBtn = document.getElementById('tab-login');
+      const registerBtn = document.getElementById('tab-register');
 
-      if (tab === 'login') {
-        loginForm.classList.add('active');
-        registerForm.classList.remove('active');
-        loginTab.classList.add('active');
-        registerTab.classList.remove('active');
+      if (type === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
       } else {
-        registerForm.classList.add('active');
-        loginForm.classList.remove('active');
-        registerTab.classList.add('active');
-        loginTab.classList.remove('active');
+        registerForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        registerBtn.classList.add('active');
+        loginBtn.classList.remove('active');
       }
     }
-
-    // Prevenir recarga de página al enviar datos (Demo)
-    document.querySelectorAll('.auth-form').forEach(form => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Conexión con el servidor enviada. (Etapa de pruebas)');
-      });
-    });
   </script>
 </body>
 </html>
