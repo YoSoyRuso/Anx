@@ -3,22 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESK | Juega y Crea Sin Límites</title>
+  <title>ESK | Plataforma Oficial de Creación y Descarga de Videojuegos</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Iconos FontAwesome para toque profesional -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      --bg-main: #07090e;
-      --bg-panel: #0d111a;
-      --bg-card: #131926;
-      --border-color: #1f2838;
-      --accent-cyan: #06b6d4;
-      --accent-glow: rgba(6, 182, 212, 0.25);
+      --bg-app: #080a0f;
+      --bg-navbar: #0c0f17;
+      --bg-panel: #131824;
+      --bg-card: #182030;
+      --bg-card-hover: #1f283d;
+      --border-color: #232c42;
+      --border-focus: #3b82f6;
+      --accent-blue: #3b82f6;
+      --accent-blue-glow: rgba(59, 130, 246, 0.25);
       --accent-green: #10b981;
-      --text-main: #f1f5f9;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --font-title: 'Outfit', sans-serif;
       --font-body: 'Plus Jakarta Sans', sans-serif;
@@ -31,7 +36,7 @@
     }
 
     body {
-      background-color: var(--bg-main);
+      background-color: var(--bg-app);
       color: var(--text-main);
       font-family: var(--font-body);
       min-height: 100vh;
@@ -41,52 +46,49 @@
       overflow-x: hidden;
     }
 
-    /* Fondo ambiental con luz sutil */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1000px;
-      height: 350px;
-      background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, rgba(0,0,0,0) 70%);
-      z-index: -1;
-    }
-
-    /* Barra de Navegación */
+    /* Barra de Navegación Profesional Estilo Steam/Epic */
     .navbar {
-      background-color: rgba(13, 17, 26, 0.9);
-      backdrop-filter: blur(16px);
+      background-color: var(--bg-navbar);
       border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 6%;
+      padding: 1rem 5%;
       position: sticky;
       top: 0;
       z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
     }
 
     .logo {
       font-family: var(--font-title);
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 900;
       color: var(--text-main);
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+    }
+
+    .logo i {
+      color: var(--accent-blue);
     }
 
     .logo span {
-      color: var(--accent-cyan);
-      text-shadow: 0 0 20px var(--accent-glow);
+      color: var(--accent-blue);
     }
 
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 2rem;
       list-style: none;
       font-weight: 600;
       font-size: 0.95rem;
@@ -96,118 +98,186 @@
       color: var(--text-muted);
       text-decoration: none;
       transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .nav-links a:hover, .nav-links a.active {
       color: var(--text-main);
     }
 
-    .user-pill {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.85rem;
+    .nav-right {
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: var(--text-muted);
-      font-weight: 600;
+      gap: 1.5rem;
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent-green);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent-green);
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     /* Contenedor Principal */
     .main-layout {
-      max-width: 1320px;
+      max-width: 1400px;
       margin: 2.5rem auto;
-      padding: 0 1.5rem;
+      padding: 0 2rem;
       width: 100%;
       display: grid;
       grid-template-columns: 1fr;
       gap: 2.5rem;
     }
 
-    @media (min-width: 1060px) {
+    @media (min-width: 1100px) {
       .main-layout {
         grid-template-columns: 1fr 380px;
       }
     }
 
-    /* Sección Izquierda: Catálogo */
-    .store-section {
+    /* Sección de Contenido Izquierda */
+    .content-section {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 2.5rem;
     }
 
-    .hero-banner {
-      background: linear-gradient(135deg, #111827, #090d16);
+    /* Banner Principal de Destacados */
+    .hero-showcase {
+      background: linear-gradient(135deg, #111827, #0d121d);
       border: 1px solid var(--border-color);
-      border-radius: 24px;
+      border-radius: 20px;
       padding: 3rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
     }
 
-    .hero-banner h1 {
+    .hero-showcase::after {
+      content: '';
+      position: absolute;
+      right: -50px;
+      bottom: -50px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--accent-blue-glow) 0%, transparent 70%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 550px;
+    }
+
+    .hero-tag {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-blue);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .hero-showcase h1 {
       font-family: var(--font-title);
-      font-size: clamp(2rem, 3.5vw, 2.8rem);
-      margin-bottom: 0.8rem;
-      line-height: 1.15;
-      letter-spacing: -0.5px;
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
     }
 
-    .hero-banner h1 span {
-      color: var(--accent-cyan);
-    }
-
-    .hero-banner p {
+    .hero-showcase p {
       color: var(--text-muted);
-      font-size: 1.1rem;
-      max-width: 520px;
-      margin-bottom: 2rem;
+      font-size: 1rem;
       line-height: 1.6;
+      margin-bottom: 1.8rem;
     }
 
-    .btn-primary {
-      background: var(--accent-cyan);
-      color: #07090e;
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-main {
+      background: var(--accent-blue);
+      color: #fff;
       border: none;
-      padding: 14px 28px;
-      border-radius: 12px;
+      padding: 12px 24px;
+      border-radius: 10px;
       font-family: var(--font-title);
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 20px var(--accent-glow);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px var(--accent-blue-glow);
+      text-decoration: none;
     }
 
-    .btn-primary:hover {
-      background: #22d3ee;
+    .btn-main:hover {
+      background: #2563eb;
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--text-muted);
+    }
+
+    /* Secciones de Juegos */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
     }
 
     .section-title {
       font-family: var(--font-title);
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      letter-spacing: -0.2px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    /* Cuadrícula de Juegos Jugables */
+    .section-title i {
+      color: var(--accent-blue);
+    }
+
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -217,30 +287,42 @@
     .game-card {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
     }
 
     .game-card:hover {
       transform: translateY(-6px);
-      border-color: rgba(6, 182, 212, 0.4);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border-color: var(--border-focus);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
     }
 
-    /* Contenedor Interactivo del Juego */
-    .game-viewport {
-      height: 180px;
-      background: #090c14;
+    .game-thumb {
+      height: 160px;
+      background: var(--bg-card);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 3rem;
       border-bottom: 1px solid var(--border-color);
-      overflow: hidden;
-      user-select: none;
+    }
+
+    .game-badge-os {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(8, 10, 15, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
     }
 
     .game-info {
@@ -249,106 +331,100 @@
       flex-direction: column;
       flex: 1;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 1.2rem;
     }
 
     .game-title {
       font-family: var(--font-title);
       font-size: 1.15rem;
       font-weight: 700;
+      margin-bottom: 4px;
     }
 
-    .game-category {
+    .game-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: -2px;
+    }
+
+    .game-rating {
+      color: #f59e0b;
+      font-weight: 600;
     }
 
     .game-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
     }
 
     .game-price {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--accent-green);
       font-size: 0.95rem;
-      background: rgba(16, 185, 129, 0.1);
-      padding: 4px 10px;
-      border-radius: 8px;
     }
 
-    .btn-play {
+    .btn-download {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 8px;
       font-family: var(--font-title);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.85rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transition: all 0.2s;
     }
 
-    .btn-play:hover {
-      background: var(--accent-cyan);
-      color: #07090e;
-      border-color: var(--accent-cyan);
-    }
-
-    /* MINI JUEGOS EMBEBIDOS */
-    /* 1. Neon Clicker */
-    #clicker-score {
-      font-size: 2.2rem;
-      font-family: var(--font-title);
-      font-weight: 800;
-      color: var(--accent-cyan);
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    #clicker-score:active { transform: scale(0.9); }
-
-    /* 2. Color Matcher */
-    .color-box {
-      width: 70px;
-      height: 70px;
-      border-radius: 12px;
-      cursor: pointer;
-      border: 2px solid rgba(255,255,255,0.2);
-      transition: transform 0.2s;
-    }
-    .color-box:hover { transform: scale(1.05); }
-
-    /* 3. Adivina el Número */
-    .mini-input {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: white;
-      padding: 6px 10px;
-      border-radius: 6px;
-      width: 60px;
-      text-align: center;
-      font-family: var(--font-title);
+    .btn-download:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #fff;
     }
 
 
-    /* Panel de Autenticación */
+    /* Panel de Autenticación Derecho (Estilo Cliente Profesional) */
     .auth-panel {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
-      border-radius: 24px;
+      border-radius: 20px;
       padding: 2.2rem;
       height: fit-content;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 90px;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .auth-header h3 {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .auth-header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
 
     .auth-tabs {
       display: flex;
-      background: var(--bg-main);
-      padding: 5px;
-      border-radius: 14px;
+      background: var(--bg-app);
+      padding: 4px;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
       margin-bottom: 1.8rem;
     }
@@ -363,7 +439,7 @@
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 8px;
       transition: all 0.2s ease;
     }
 
@@ -394,11 +470,25 @@
       letter-spacing: 0.8px;
     }
 
-    .input-field input {
-      background: var(--bg-main);
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      background: var(--bg-app);
       border: 1px solid var(--border-color);
-      padding: 13px 16px;
-      border-radius: 12px;
+      padding: 12px 14px 12px 42px;
+      border-radius: 10px;
       color: var(--text-main);
       font-family: var(--font-body);
       font-size: 0.95rem;
@@ -406,27 +496,43 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .input-field input:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+    .input-wrapper input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px var(--accent-blue-glow);
     }
 
     .btn-submit {
-      background: var(--text-main);
-      color: var(--bg-main);
+      background: var(--accent-blue);
+      color: #fff;
       border: none;
       padding: 13px;
-      border-radius: 12px;
+      border-radius: 10px;
       font-family: var(--font-title);
       font-weight: 800;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: opacity 0.2s ease, transform 0.1s ease;
-      margin-top: 0.6rem;
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 15px var(--accent-blue-glow);
     }
 
-    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:hover { background: #2563eb; }
     .btn-submit:active { transform: scale(0.98); }
+
+    .security-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .security-notice i {
+      color: var(--accent-green);
+    }
 
     .hidden { display: none; }
   </style>
@@ -435,143 +541,195 @@
 
   <!-- Barra de Navegación -->
   <header class="navbar">
-    <div class="logo">
-      <span>ESK</span>.GG
+    <div class="nav-left">
+      <a href="#" class="logo">
+        <i class="fa-solid fa-gamepad"></i> ESK<span>.GG</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#" class="active"><i class="fa-solid fa-store"></i> Tienda</a></li>
+        <li><a href="#"><i class="fa-solid fa-code"></i> SDK & Creadores</a></li>
+        <li><a href="#"><i class="fa-solid fa-shield-halved"></i> Seguridad</a></li>
+      </ul>
     </div>
-    <ul class="nav-links">
-      <li><a href="#" class="active">Explorar</a></li>
-      <li><a href="#">Comunidad</a></li>
-      <li><a href="#">Creadores</a></li>
-    </ul>
-    <div class="user-pill">
-      <span class="status-dot"></span> Servidor Estable
+    <div class="nav-right">
+      <div class="trust-badge">
+        <i class="fa-solid fa-shield-check"></i> Descargas Verificadas
+      </div>
     </div>
   </header>
 
   <!-- Contenido Principal -->
   <main class="main-layout">
     
-    <!-- Sección Izquierda: Catálogo y Minijuegos -->
-    <section class="store-section">
-      <div class="hero-banner">
-        <h1>Juega al instante en <span>ESK</span></h1>
-        <p>Prueba los mejores minijuegos integrados directamente en la plataforma o publica tus propias creaciones hoy mismo.</p>
-        <button class="btn-primary" onclick="alert('¡Inicia sesión o regístrate a la derecha para empezar a crear!')">Comenzar a Crear</button>
-      </div>
-
-      <h3 class="section-title">⚡ Juegos creados por ESK, solo para que prueben</h3>
+    <!-- Sección Izquierda: Catálogo y Banner -->
+    <section class="content-section">
       
-      <div class="games-grid">
-        
-        <!-- JUEGO 1: Neon Clicker -->
-        <div class="game-card">
-          <div class="game-viewport" id="viewport-1" onclick="clickerScore++">
-            <div style="text-align:center;">
-              <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 2px;">¡HAZ CLIC RÁPIDO!</div>
-              <div id="clicker-score">0</div>
-            </div>
-          </div>
-          <div class="game-info">
-            <div>
-              <h4 class="game-title">Neon Clicker</h4>
-              <div class="game-category">Arcade / Habilidad</div>
-            </div>
-            <div class="game-footer">
-              <span class="game-price">GRATIS</span>
-              <button class="btn-play" onclick="resetClicker()">Reiniciar</button>
-            </div>
+      <!-- Banner Destacado -->
+      <div class="hero-showcase">
+        <div class="hero-content">
+          <div class="hero-tag">Lanzamiento Oficial ESK 2026</div>
+          <h1>Crea, publica y descarga sin límites</h1>
+          <p>La plataforma definitiva para desarrolladores independientes y jugadores. Accede a herramientas de desarrollo optimizadas y descarga títulos exclusivos con un solo clic.</p>
+          <div class="hero-actions">
+            <a href="#games-section" class="btn-main">
+              <i class="fa-solid fa-download"></i> Explorar Catálogo
+            </a>
+            <a href="#" class="btn-secondary">
+              <i class="fa-solid fa-book"></i> Documentación SDK
+            </a>
           </div>
         </div>
-
-        <!-- JUEGO 2: Color Matcher -->
-        <div class="game-card">
-          <div class="game-viewport" id="viewport-2" style="flex-direction: column; gap: 8px;">
-            <div id="color-target-text" style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan);">¡Encuentra el cyan!</div>
-            <div style="display: flex; gap: 10px;">
-              <div class="color-box" style="background: #ef4444;" onclick="checkColor(false)"></div>
-              <div class="color-box" id="winning-box" style="background: #06b6d4;" onclick="checkColor(true)"></div>
-              <div class="color-box" style="background: #8b5cf6;" onclick="checkColor(false)"></div>
-            </div>
-          </div>
-          <div class="game-info">
-            <div>
-              <h4 class="game-title">Color Match</h4>
-              <div class="game-category">Puzzle / Casual</div>
-            </div>
-            <div class="game-footer">
-              <span class="game-price">GRATIS</span>
-              <button class="btn-play" onclick="shuffleColors()">Mezclar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- JUEGO 3: Adivina el Número (1 al 10) -->
-        <div class="game-card">
-          <div class="game-viewport" id="viewport-3" style="flex-direction: column; gap: 10px;">
-            <div style="font-size: 0.8rem; color: #94a3b8;">Adivina del 1 al 10:</div>
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <input type="number" id="guess-input" class="mini-input" min="1" max="10" placeholder="?">
-              <button class="btn-play" style="background: var(--accent-cyan); color:#07090e;" onclick="checkGuess()">Probar</button>
-            </div>
-            <div id="guess-msg" style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green); height: 16px;"></div>
-          </div>
-          <div class="game-info">
-            <div>
-              <h4 class="game-title">Cyber Guess</h4>
-              <div class="game-category">Mental / Reto</div>
-            </div>
-            <div class="game-footer">
-              <span class="game-price">GRATIS</span>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">¡Pruébalo ahora!</span>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Sección de Juegos y Descargas -->
+      <div id="games-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="fa-solid fa-fire"></i> Juegos creados por ESK, listos para descargar
+          </h3>
+        </div>
+        
+        <div class="games-grid">
+          
+          <!-- Juego 1 -->
+          <div class="game-card">
+            <div class="game-thumb">
+              <span class="game-badge-os"><i class="fa-brands fa-windows"></i> Win / Linux</span>
+              🚀
+            </div>
+            <div class="game-info">
+              <div>
+                <h4 class="game-title">Neon Drifter</h4>
+                <div class="game-meta">
+                  <span>Acción / Carreras</span>
+                  <span class="game-rating"><i class="fa-solid fa-star"></i> 4.9</span>
+                </div>
+              </div>
+              <div class="game-footer">
+                <span class="game-price">GRATIS</span>
+                <button class="btn-download" onclick="alert('Iniciando descarga segura de Neon Drifter v1.2...')">
+                  <i class="fa-solid fa-cloud-arrow-down"></i> Descargar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Juego 2 -->
+          <div class="game-card">
+            <div class="game-thumb">
+              <span class="game-badge-os"><i class="fa-brands fa-windows"></i> Multiplataforma</span>
+              🧩
+            </div>
+            <div class="game-info">
+              <div>
+                <h4 class="game-title">Quantum Puzzle</h4>
+                <div class="game-meta">
+                  <span>Estrategia / Indie</span>
+                  <span class="game-rating"><i class="fa-solid fa-star"></i> 4.8</span>
+                </div>
+              </div>
+              <div class="game-footer">
+                <span class="game-price">GRATIS</span>
+                <button class="btn-download" onclick="alert('Iniciando descarga segura de Quantum Puzzle v2.0...')">
+                  <i class="fa-solid fa-cloud-arrow-down"></i> Descargar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Juego 3 -->
+          <div class="game-card">
+            <div class="game-thumb">
+              <span class="game-badge-os"><i class="fa-brands fa-windows"></i> Motor ESK Core</span>
+              ⚔️
+            </div>
+            <div class="game-info">
+              <div>
+                <h4 class="game-title">Pixel Dungeon</h4>
+                <div class="game-meta">
+                  <span>RPG / Roguelike</span>
+                  <span class="game-rating"><i class="fa-solid fa-star"></i> 5.0</span>
+                </div>
+              </div>
+              <div class="game-footer">
+                <span class="game-price">GRATIS</span>
+                <button class="btn-download" onclick="alert('Iniciando descarga segura de Pixel Dungeon...')">
+                  <i class="fa-solid fa-cloud-arrow-down"></i> Descargar
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </section>
 
-    <!-- Sección Derecha: Panel de Acceso -->
+    <!-- Sección Derecha: Panel Profesional de Acceso / Registro -->
     <aside class="auth-panel">
+      <div class="auth-header">
+        <h3>Portal de Creadores</h3>
+        <p>Inicia sesión para gestionar tus juegos y descargas</p>
+      </div>
+
       <div class="auth-tabs">
         <button class="tab-btn active" id="btn-login" onclick="switchTab('login')">Acceder</button>
         <button class="tab-btn" id="btn-register" onclick="switchTab('register')">Registrarse</button>
       </div>
 
       <!-- Formulario de Iniciar Sesión -->
-      <form id="form-login" class="auth-form" onsubmit="event.preventDefault(); alert('¡Bienvenido de vuelta a ESK!');">
+      <form id="form-login" class="auth-form" onsubmit="event.preventDefault(); alert('¡Sesión iniciada correctamente en ESK!');">
         <div class="input-field">
-          <label>Usuario o Email</label>
-          <input type="text" placeholder="ej. player_esk" required autocomplete="off">
+          <label>Usuario o Correo</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" placeholder="ej. developer_esk" required autocomplete="off">
+          </div>
         </div>
         <div class="input-field">
           <label>Contraseña</label>
-          <input type="password" placeholder="••••••••" required>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" placeholder="••••••••" required>
+          </div>
         </div>
         <button type="submit" class="btn-submit">Iniciar Sesión</button>
       </form>
 
       <!-- Formulario de Registro -->
-      <form id="form-register" class="auth-form hidden" onsubmit="event.preventDefault(); alert('¡Cuenta creada con éxito en ESK!');">
+      <form id="form-register" class="auth-form hidden" onsubmit="event.preventDefault(); alert('¡Cuenta creada con éxito! Bienvenido a la comunidad ESK.');">
         <div class="input-field">
-          <label>Elige tu Apodo</label>
-          <input type="text" placeholder="ej. CyberGamer" required autocomplete="off">
+          <label>Nombre de Usuario</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-id-badge"></i>
+            <input type="text" placeholder="ej. CyberDev" required autocomplete="off">
+          </div>
         </div>
         <div class="input-field">
           <label>Correo Electrónico</label>
-          <input type="email" placeholder="correo@dominio.com" required autocomplete="off">
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" placeholder="correo@dominio.com" required autocomplete="off">
+          </div>
         </div>
         <div class="input-field">
           <label>Contraseña</label>
-          <input type="password" placeholder="••••••••" required>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" placeholder="••••••••" required>
+          </div>
         </div>
-        <button type="submit" class="btn-submit">Registrarse Gratis</button>
+        <button type="submit" class="btn-submit">Crear Cuenta Gratis</button>
       </form>
+
+      <div class="security-notice">
+        <i class="fa-solid fa-shield-check"></i> Encriptación SSL de 256 bits y ejecutables analizados contra malware.
+      </div>
     </aside>
 
   </main>
 
   <script>
-    // Sistema de Pestañas de Autenticación
     function switchTab(type) {
       const loginForm = document.getElementById('form-login');
       const registerForm = document.getElementById('form-register');
@@ -588,68 +746,6 @@
         loginForm.classList.add('hidden');
         registerTab.classList.add('active');
         loginTab.classList.remove('active');
-      }
-    }
-
-    // Lógica Minijuego 1: Clicker
-    let clickerScore = 0;
-    setInterval(() => {
-      const scoreEl = document.getElementById('clicker-score');
-      if(scoreEl) scoreEl.innerText = clickerScore;
-    }, 100);
-    function resetClicker() {
-      clickerScore = 0;
-    }
-
-    // Lógica Minijuego 2: Color Match
-    function checkColor(isWin) {
-      if(isWin) {
-        alert('¡Ganaste! Encontraste el color correcto 🎉');
-        shuffleColors();
-      } else {
-        alert('¡Fallaste! Ese no era, intenta de nuevo.');
-      }
-    }
-    function shuffleColors() {
-      const colors = ['#06b6d4', '#ec4899', '#eab308', '#3b82f6'];
-      const boxes = document.querySelectorAll('.color-box');
-      const winningIndex = Math.floor(Math.random() * boxes.length);
-      
-      boxes.forEach((box, index) => {
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-        box.style.background = randomColor;
-        if(index === winningIndex) {
-          box.style.background = '#06b6d4'; // Forzamos un ganador
-          box.setAttribute('onclick', 'checkColor(true)');
-        } else {
-          box.setAttribute('onclick', 'checkColor(false)');
-        }
-      });
-    }
-
-    // Lógica Minijuego 3: Adivina el Número
-    let targetNum = Math.floor(Math.random() * 5) + 1;
-    function checkGuess() {
-      const input = document.getElementById('guess-input');
-      const msg = document.getElementById('guess-msg');
-      const val = parseInt(input.value);
-
-      if(isNaN(val)) {
-        msg.style.color = '#ef4444';
-        msg.innerText = 'Ingresa un número válido';
-        return;
-      }
-
-      if(val === targetNum) {
-        msg.style.color = '#10b981';
-        msg.innerText = '¡Correcto! Adivinaste 🎯';
-        targetNum = Math.floor(Math.random() * 5) + 1; // Reinicia
-      } else if(val < targetNum) {
-        msg.style.color = '#eab308';
-        msg.innerText = 'Es más alto 📈';
-      } else {
-        msg.style.color = '#eab308';
-        msg.innerText = 'Es más bajo 📉';
       }
     }
   </script>
