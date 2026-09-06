@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Play | Tu Biblioteca de Juegos</title>
+  <title>Lumina | Tu Biblioteca de Juegos</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-main: #0d0f14;
-      --bg-panel: #141821;
-      --bg-card: #1b202d;
-      --border-color: #272d3d;
-      --accent-blue: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.2);
+      --bg-main: #090b10;
+      --bg-panel: #111520;
+      --bg-card: #181d2c;
+      --border-color: #232a3d;
+      --accent-purple: #8b5cf6;
+      --accent-glow: rgba(139, 92, 246, 0.2);
       --accent-green: #10b981;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --font-title: 'Outfit', sans-serif;
-      --font-body: 'Inter', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
     * {
@@ -42,7 +42,8 @@
 
     /* Barra de Navegación */
     .navbar {
-      background-color: var(--bg-panel);
+      background-color: rgba(17, 21, 32, 0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
@@ -51,22 +52,21 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      backdrop-filter: blur(8px);
     }
 
     .logo {
       font-family: var(--font-title);
-      font-size: 1.5rem;
-      font-weight: 800;
+      font-size: 1.6rem;
+      font-weight: 700;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 8px;
-      letter-spacing: 0.5px;
+      gap: 10px;
+      letter-spacing: -0.5px;
     }
 
     .logo span {
-      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      background: linear-gradient(135deg, #c084fc, #8b5cf6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -134,20 +134,20 @@
     }
 
     .hero-banner {
-      background: linear-gradient(135deg, #182232, #0e141f);
+      background: linear-gradient(135deg, #161a29, #0d1017);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 3rem 2.5rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     }
 
     .hero-banner h1 {
       font-family: var(--font-title);
-      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
       margin-bottom: 0.8rem;
-      line-height: 1.25;
+      line-height: 1.2;
       letter-spacing: -0.5px;
     }
 
@@ -160,11 +160,11 @@
     }
 
     .btn-primary {
-      background: var(--accent-blue);
+      background: var(--accent-purple);
       color: #ffffff;
       border: none;
       padding: 12px 26px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-family: var(--font-title);
       font-weight: 600;
       font-size: 0.95rem;
@@ -174,15 +174,16 @@
     }
 
     .btn-primary:hover {
-      background: #2563eb;
+      background: #7c3aed;
       transform: translateY(-1px);
     }
 
     .section-title {
       font-family: var(--font-title);
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: -0.2px;
     }
 
     /* Tarjetas de Juegos */
@@ -195,21 +196,21 @@
     .game-card {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       cursor: pointer;
     }
 
     .game-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-4px);
+      border-color: rgba(139, 92, 246, 0.4);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
 
     .game-thumb {
       height: 140px;
-      background: #1e2637;
+      background: #191f30;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -250,17 +251,17 @@
     .auth-panel {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 2rem;
       height: fit-content;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     }
 
     .auth-tabs {
       display: flex;
       background: var(--bg-main);
       padding: 4px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid var(--border-color);
       margin-bottom: 1.5rem;
     }
@@ -275,7 +276,7 @@
       font-weight: 600;
       font-size: 0.9rem;
       cursor: pointer;
-      border-radius: 9px;
+      border-radius: 10px;
       transition: all 0.2s ease;
     }
 
@@ -298,7 +299,7 @@
     }
 
     .input-field label {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -308,8 +309,8 @@
     .input-field input {
       background: var(--bg-main);
       border: 1px solid var(--border-color);
-      padding: 11px 14px;
-      border-radius: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
       color: var(--text-main);
       font-family: var(--font-body);
       font-size: 0.95rem;
@@ -318,7 +319,7 @@
     }
 
     .input-field input:focus {
-      border-color: var(--accent-blue);
+      border-color: var(--accent-purple);
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
@@ -327,9 +328,9 @@
       color: var(--bg-main);
       border: none;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-family: var(--font-title);
-      font-weight: 700;
+      font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
       transition: opacity 0.2s ease, transform 0.1s ease;
@@ -354,7 +355,7 @@
   <!-- Barra de Navegación -->
   <header class="navbar">
     <div class="logo">
-      🎮 NEXUS<span>PLAY</span>
+      ✨ LUMINA
     </div>
     <ul class="nav-links">
       <li><a href="#" class="active">Tienda</a></li>
@@ -372,12 +373,12 @@
     <!-- Sección Izquierda: Catálogo y Banner -->
     <section class="store-section">
       <div class="hero-banner">
-        <h1>Explora, juega y comparte juegos independientes</h1>
-        <p>Descubre títulos únicos creados por la comunidad o publica tu propio proyecto de forma instantánea y sin complicaciones.</p>
+        <h1>Un espacio cálido para crear y jugar</h1>
+        <p>Descubre títulos únicos hechos por creadores independientes o publica tus propias creaciones de forma instantánea.</p>
         <button class="btn-primary">Explorar Catálogo</button>
       </div>
 
-      <h3 class="section-title">Tendencias Destacadas</h3>
+      <h3 class="section-title">Juegos creados por Lumina, solo para que prueben</h3>
       
       <div class="games-grid">
         <!-- Juego 1 -->
@@ -429,7 +430,7 @@
       <form id="form-login" class="auth-form" onsubmit="event.preventDefault(); alert('¡Sesión iniciada con éxito!');">
         <div class="input-field">
           <label>Usuario o Email</label>
-          <input type="text" placeholder="ej. nexus_user" required autocomplete="off">
+          <input type="text" placeholder="ej. lumina_user" required autocomplete="off">
         </div>
         <div class="input-field">
           <label>Contraseña</label>
