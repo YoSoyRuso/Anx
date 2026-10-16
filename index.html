@@ -1,636 +1,116 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESK | Plataforma Global de Creación y Distribución</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    :root {
-      --bg-app: #05070b;
-      --bg-navbar: #090d14;
-      --bg-panel: #0e1420;
-      --bg-card: #131a2b;
-      --bg-card-hover: #19233b;
-      --border-color: #1f2b45;
-      --border-focus: #3b82f6;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.2);
-      --accent-cyan: #06b6d4;
-      --accent-green: #10b981;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --font-title: 'Outfit', sans-serif;
-      --font-body: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: var(--bg-app);
-      color: var(--text-main);
-      font-family: var(--font-body);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* Fondo ambiental sutil de alta gama */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1200px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.07) 0%, transparent 70%);
-      z-index: -1;
-    }
-
-    /* Barra de Navegación */
-    .navbar {
-      background-color: var(--bg-navbar);
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.1rem 6%;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 3.5rem;
-    }
-
-    .logo {
-      font-family: var(--font-title);
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--text-main);
-      letter-spacing: 2px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo i {
-      color: var(--accent-blue);
-      filter: drop-shadow(0 0 10px var(--accent-blue-glow));
-    }
-
-    .logo span {
-      background: linear-gradient(135deg, #60a5fa, #3b82f6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.2rem;
-      list-style: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--text-main);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--accent-green);
-      background: rgba(16, 185, 129, 0.08);
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-
-    /* Contenedor Principal */
-    .main-layout {
-      max-width: 1380px;
-      margin: 3rem auto;
-      padding: 0 2rem;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
-
-    @media (min-width: 1080px) {
-      .main-layout {
-        grid-template-columns: 1fr 390px;
-      }
-    }
-
-    /* Sección Izquierda */
-    .content-section {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-
-    /* Hero Showcase principal */
-    .hero-showcase {
-      background: linear-gradient(135deg, #0e1420, #090d16);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 3.5rem 3rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-
-    .hero-showcase::after {
-      content: '';
-      position: absolute;
-      right: -30px;
-      bottom: -30px;
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
-      z-index: 1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 580px;
-    }
-
-    .hero-tag {
-      background: rgba(6, 182, 212, 0.1);
-      color: var(--accent-cyan);
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      padding: 6px 14px;
-      border-radius: 8px;
-      display: inline-block;
-      margin-bottom: 1.2rem;
-      border: 1px solid rgba(6, 182, 212, 0.25);
-    }
-
-    .hero-showcase h1 {
-      font-family: var(--font-title);
-      font-size: clamp(2.2rem, 3.5vw, 3rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-      letter-spacing: -0.5px;
-    }
-
-    .hero-showcase p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-main {
-      background: var(--accent-blue);
-      color: #fff;
-      border: none;
-      padding: 13px 26px;
-      border-radius: 12px;
-      font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 20px var(--accent-blue-glow);
-      text-decoration: none;
-    }
-
-    .btn-main:hover {
-      background: #2563eb;
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 13px 26px;
-      border-radius: 12px;
-      font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--text-muted);
-    }
-
-    /* Grid de Características / Ecosistema ESK */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .feature-card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2rem;
-      transition: all 0.3s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--border-focus);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-      background: var(--bg-card);
-    }
-
-    .feature-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-blue);
-      font-size: 1.2rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .feature-card h3 {
-      font-family: var(--font-title);
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .feature-card p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-
-
-    /* Panel de Autenticación Derecho (Limpio, Sin Juegos) */
-    .auth-panel {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 2.5rem;
-      height: fit-content;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      position: sticky;
-      top: 100px;
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .auth-header h3 {
-      font-family: var(--font-title);
-      font-size: 1.45rem;
-      font-weight: 800;
-      margin-bottom: 6px;
-      letter-spacing: -0.3px;
-    }
-
-    .auth-header p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .auth-tabs {
-      display: flex;
-      background: var(--bg-app);
-      padding: 5px;
-      border-radius: 14px;
-      border: 1px solid var(--border-color);
-      margin-bottom: 2rem;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 11px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      border-radius: 10px;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn.active {
-      background: var(--bg-card);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.3rem;
-    }
-
-    .input-field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .input-field label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-wrapper i {
-      position: absolute;
-      left: 15px;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .input-wrapper input {
-      width: 100%;
-      background: var(--bg-app);
-      border: 1px solid var(--border-color);
-      padding: 13px 15px 13px 44px;
-      border-radius: 12px;
-      color: var(--text-main);
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .input-wrapper input:focus {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px var(--accent-blue-glow);
-    }
-
-    .btn-submit {
-      background: var(--accent-blue);
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-family: var(--font-title);
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 0.6rem;
-      box-shadow: 0 4px 20px var(--accent-blue-glow);
-    }
-
-    .btn-submit:hover { background: #2563eb; }
-    .btn-submit:active { transform: scale(0.98); }
-
-    .security-notice {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      margin-top: 1.8rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .security-notice i {
-      color: var(--accent-green);
-      font-size: 0.9rem;
-    }
-
-    .hidden { display: none; }
-  </style>
+  <meta name="theme-color" content="#101419">
+  <title>MENTIRA: El último testigo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="intro" class="intro">
+    <div class="intro-content">
+      <div class="department">DEPARTAMENTO DE POLICÍA · REDMOONT</div>
+      <div class="intro-line"></div>
+      <p class="eyebrow">EXPEDIENTE CONFIDENCIAL</p>
+      <h1>MENTIRA<span>:</span><br>EL ÚLTIMO TESTIGO</h1>
+      <p class="intro-description">
+        Un nuevo homicidio aterra a Redmoont. Las pruebas no coinciden,
+        los testigos ocultan información y alguien está mintiendo.
+        ¿Podrá la policía encontrar al culpable?
+      </p>
+      <button id="startBtn" class="primary-button">ABRIR EXPEDIENTE →</button>
+      <p class="small-note">JUEGO DE INVESTIGACIÓN · CASOS FICTICIOS</p>
+    </div>
+  </div>
 
-  <!-- Barra de Navegación -->
-  <header class="navbar">
-    <div class="nav-left">
-      <a href="#" class="logo">
-        <i class="fa-solid fa-cube"></i> <span>ESK</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="#" class="active"><i class="fa-solid fa-compass"></i> Explorar</a></li>
-        <li><a href="#"><i class="fa-solid fa-code"></i> Herramientas SDK</a></li>
-        <li><a href="#"><i class="fa-solid fa-shield-halved"></i> Seguridad</a></li>
-      </ul>
+  <header class="topbar">
+    <a class="brand" href="#" id="homeBtn">M<span>.</span></a>
+    <div>
+      <div class="top-title">DEPARTAMENTO DE POLICÍA</div>
+      <div class="top-subtitle">REDMOONT · UNIDAD DE HOMICIDIOS</div>
     </div>
-    <div class="nav-right">
-      <div class="trust-badge">
-        <i class="fa-solid fa-circle-check"></i> Ecosistema Verificado
-      </div>
-    </div>
+    <div class="status"><span class="status-dot"></span> CASO ACTIVO</div>
   </header>
 
-  <!-- Contenido Principal -->
-  <main class="main-layout">
-    
-    <!-- Sección Izquierda: Presentación y Ecosistema -->
-    <section class="content-section">
-      
-      <!-- Banner Destacado -->
-      <div class="hero-showcase">
-        <div class="hero-content">
-          <div class="hero-tag">Tecnología de Próxima Generación</div>
-          <h1>El ecosistema definitivo para creadores y jugadores</h1>
-          <p>Desarrolla, despliega y comparte proyectos de alto rendimiento con total seguridad. ESK ofrece la infraestructura moderna que necesitas para llevar tus creaciones al siguiente nivel.</p>
-          <div class="hero-actions">
-            <a href="#" class="btn-main">
-              <i class="fa-solid fa-rocket"></i> Comenzar Proyecto
-            </a>
-            <a href="#" class="btn-secondary">
-              <i class="fa-solid fa-book-open"></i> Documentación
-            </a>
-          </div>
-        </div>
+  <main id="game" class="layout hidden">
+    <section class="case-banner">
+      <div>
+        <p class="eyebrow">ARCHIVO DE INVESTIGACIÓN</p>
+        <h2 id="caseTitle">Expediente 001</h2>
+        <p id="caseDescription"></p>
       </div>
-
-      <!-- Tarjetas de Características -->
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-bolt"></i>
-          </div>
-          <h3>Alto Rendimiento</h3>
-          <p>Optimizado para ofrecer tiempos de carga mínimos y una ejecución fluida en cualquier dispositivo compatible.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <h3>Seguridad Extrema</h3>
-          <p>Protección contra malware y encriptación de extremo a extremo en todas las descargas y bases de datos.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-users-gear"></i>
-          </div>
-          <h3>Comunidad Global</h3>
-          <p>Conéctate con otros desarrolladores, comparte feedback y colabora en proyectos ambiciosos en tiempo real.</p>
-        </div>
-      </div>
-
+      <div class="case-stamp">CLASIFICADO<br><strong>CONFIDENCIAL</strong></div>
     </section>
 
-    <!-- Sección Derecha: Panel Exclusivo de Autenticación -->
-    <aside class="auth-panel">
-      <div class="auth-header">
-        <h3>Portal ESK</h3>
-        <p>Inicia sesión o regístrate para acceder al panel</p>
-      </div>
+    <section class="stats">
+      <div class="stat"><span>EXPEDIENTE</span><strong id="caseNumber">RM-001</strong></div>
+      <div class="stat"><span>TIEMPO RESTANTE</span><strong id="roundDisplay">5 rondas</strong></div>
+      <div class="stat"><span>PRUEBAS REUNIDAS</span><strong id="evidenceCount">0</strong></div>
+    </section>
 
-      <div class="auth-tabs">
-        <button class="tab-btn active" id="btn-login" onclick="switchTab('login')">Acceder</button>
-        <button class="tab-btn" id="btn-register" onclick="switchTab('register')">Registrarse</button>
-      </div>
+    <div class="columns">
+      <section class="panel suspects-panel">
+        <div class="panel-heading">
+          <div><span class="section-number">01 /</span> SOSPECHOSOS</div>
+          <span class="tag">PERSONAS DE INTERÉS</span>
+        </div>
+        <div id="suspects" class="suspects"></div>
+      </section>
 
-      <!-- Formulario de Iniciar Sesión -->
-      <form id="form-login" class="auth-form" onsubmit="event.preventDefault(); alert('¡Sesión iniciada correctamente en ESK!');">
-        <div class="input-field">
-          <label>Usuario o Correo</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" placeholder="ej. developer_esk" required autocomplete="off">
+      <section class="panel investigation-panel">
+        <div class="panel-heading">
+          <div><span class="section-number">02 /</span> SALA DE INVESTIGACIÓN</div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="evidence">Pruebas</button>
+          <button class="tab" data-tab="statements">Testimonios</button>
+          <button class="tab" data-tab="notes">Informe</button>
+        </div>
+
+        <div id="evidenceTab" class="tab-content">
+          <div id="evidenceList" class="evidence-list"></div>
+        </div>
+        <div id="statementsTab" class="tab-content hidden">
+          <div id="statementsList" class="statements-list"></div>
+        </div>
+        <div id="notesTab" class="tab-content hidden">
+          <div class="report-paper">
+            <p class="eyebrow">NOTAS DEL INVESTIGADOR</p>
+            <p>Examina las pistas, compara los horarios y busca contradicciones.</p>
+            <textarea id="notes" placeholder="Escribe tus deducciones aquí..."></textarea>
+            <button id="saveNotes" class="secondary-button">GUARDAR NOTAS</button>
+            <p id="notesStatus" class="muted"></p>
           </div>
         </div>
-        <div class="input-field">
-          <label>Contraseña</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-lock"></i>
-            <input type="password" placeholder="••••••••" required>
-          </div>
-        </div>
-        <button type="submit" class="btn-submit">Iniciar Sesión</button>
-      </form>
 
-      <!-- Formulario de Registro -->
-      <form id="form-register" class="auth-form hidden" onsubmit="event.preventDefault(); alert('¡Cuenta creada con éxito! Bienvenido a ESK.');">
-        <div class="input-field">
-          <label>Nombre de Usuario</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-id-badge"></i>
-            <input type="text" placeholder="ej. CyberDev" required autocomplete="off">
-          </div>
+        <div class="actions">
+          <button id="searchBtn" class="secondary-button">⌕ Buscar una pista</button>
+          <button id="accuseBtn" class="primary-button">⚑ Acusar a alguien</button>
         </div>
-        <div class="input-field">
-          <label>Correo Electrónico</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-envelope"></i>
-            <input type="email" placeholder="correo@dominio.com" required autocomplete="off">
-          </div>
-        </div>
-        <div class="input-field">
-          <label>Contraseña</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-lock"></i>
-            <input type="password" placeholder="••••••••" required>
-          </div>
-        </div>
-        <button type="submit" class="btn-submit">Crear Cuenta Gratis</button>
-      </form>
+        <p class="hint">Cada búsqueda consume una ronda. Analiza antes de acusar.</p>
+      </section>
+    </div>
 
-      <div class="security-notice">
-        <i class="fa-solid fa-shield-check"></i> Encriptación SSL avanzada y protección de datos garantizada.
-      </div>
-    </aside>
+    <section class="panel log-panel">
+      <div class="panel-heading"><div><span class="section-number">03 /</span> REGISTRO POLICIAL</div><span class="tag">EN TIEMPO REAL</span></div>
+      <div id="activityLog" class="activity-log" aria-live="polite"></div>
+    </section>
 
+    <footer>REDMOONT POLICE DEPARTMENT <span>·</span> MENTIRA v1.0 <span>·</span> FICCIÓN</footer>
   </main>
 
-  <script>
-    function switchTab(type) {
-      const loginForm = document.getElementById('form-login');
-      const registerForm = document.getElementById('form-register');
-      const loginTab = document.getElementById('btn-login');
-      const registerTab = document.getElementById('btn-register');
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button id="closeModal" class="close-button" aria-label="Cerrar">×</button>
+      <p id="modalEyebrow" class="eyebrow">INTERROGATORIO</p>
+      <h2 id="modalTitle">Selecciona una opción</h2>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
-      if (type === 'login') {
-        loginForm.classList.remove('hidden');
-        registerForm.classList.add('hidden');
-        loginTab.classList.add('active');
-        registerTab.classList.remove('active');
-      } else {
-        registerForm.classList.remove('hidden');
-        loginForm.classList.add('hidden');
-        registerTab.classList.add('active');
-        loginTab.classList.remove('active');
-      }
-    }
-  </script>
+  <script src="game.js"></script>
 </body>
 </html>
